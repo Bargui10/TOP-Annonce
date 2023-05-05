@@ -12,7 +12,6 @@
 	<title>Top Annonces - Produits</title>
 </head>
 <body>
-
     <div class="container">
         <div class="navbar">
             <div class="logo">
@@ -47,22 +46,20 @@
                             <span onclick="register()">Register</span>
                             <hr id="Indicator">
                         </div>
-
                         <form id="LoginForm" action="login.php" method="post">
-                            <input type="text"  placeholder="Nom Utilisateur" id="userna
-                            " >
-                            <input type="password" placeholder="Mot De Passe" id="pas
-                            ">
-                            <button type="submit" class="btn">Login</button>
-                            <a href="">Forgot Password</a>
+                            <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            <input type="submit" value="login now" class="btn" name="submit">
                         </form>
                         <form id="RegisterForm" action="register.php" method="post">
-                            <input type="text" placeholder="Nom Utilisateur" id="username"required >
-                            <input type="password" placeholder="Mot De Passe" id="password" required>
-                            <input type="email" placeholder="Email" id="email" required>
-                            <button type="submit" class="btn" value="register">Register</button>
-                        </form>
-
+                            <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box">
+                            <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            <input type="submit" value="register now" class="btn" name="submit">
+                            
+                         </form>
+                      
                     </div>
                 </div>
             </div>

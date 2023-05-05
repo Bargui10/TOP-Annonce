@@ -1,21 +1,45 @@
 <?php
+
+include 'connect.php';
+
 session_start();
-include("db.php");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $email = $_POST['email'];
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
+}else{
+   $user_id = '';
+};
 
-    $sql = "INSERT INTO user (username, password, email) VALUES ('$username', '$password', '$email')";
-    $result = mysqli_query($conn, $sql);
+if(isset($_POST['submit'])){
 
-    if ($result) {
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $username;
-        header("location: account.html");
-    } else {
-        echo "<script>alert('Une erreur s\'est produite lors de l\'inscription. Veuillez réessayer.')</script>";
-    }
+   $name = $_POST['name'];
+   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $pass = sha1($_POST['pass']);
+   $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+   $cpass = sha1($_POST['cpass']);
+   $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
+
+   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
+   $select_user->execute([$email,]);
+   $row = $select_user->fetch(PDO::FETCH_ASSOC);
+
+   if($select_user->rowCount() > 0){
+      $message[] = 'email already exists!';
+   }else{
+      if($pass != $cpass){
+         $message[] = 'confirm password not matched!';
+      }else{
+         $insert_user = $conn->prepare("INSERT INTO `users`(name, email, password) VALUES(?,?,?)");
+         $insert_user->execute([$name, $email, $cpass]);
+         header('location:account.html');
+         $message[] = 'registered successfully, login now please!';
+      }
+   }
+
 }
+
+?>
+
 ?>
