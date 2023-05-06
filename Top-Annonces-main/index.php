@@ -1,3 +1,19 @@
+<?php
+
+include 'connect.php';
+
+session_start();
+
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
+}else{
+   $user_id = '';
+};
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +41,7 @@
 						<li><a href="index.html">Accueil</a></li>
 						<li><a href="products.html">Produits</a></li>
 						<li><a href="">Info</a></li>
-						<li><a href="index.php">Contact</a></li>
+						<li><a href="contact.php">Contact</a></li>
 						<li><a href="account.html">Mon Compte</a></li>
 					</ul>
 				</nav>
