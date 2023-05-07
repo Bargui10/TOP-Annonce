@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3306
--- Généré le : sam. 06 mai 2023 à 10:45
--- Version du serveur : 8.0.31
--- Version de PHP : 8.0.26
+-- Host: 127.0.0.1
+-- Generation Time: May 07, 2023 at 12:43 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,25 +18,23 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `shop_db`
+-- Database: `shop_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `admins`
+-- Table structure for table `admins`
 --
 
-DROP TABLE IF EXISTS `admins`;
-CREATE TABLE IF NOT EXISTS `admins` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `password` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `admins`
+-- Dumping data for table `admins`
 --
 
 INSERT INTO `admins` (`id`, `name`, `password`) VALUES
@@ -45,69 +43,73 @@ INSERT INTO `admins` (`id`, `name`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `annonce`
+-- Table structure for table `annonce`
 --
 
-DROP TABLE IF EXISTS `annonce`;
-CREATE TABLE IF NOT EXISTS `annonce` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `annonce` (
+  `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `price` int NOT NULL,
-  `details` varchar(20) NOT NULL,
+  `price` float NOT NULL,
+  `details` varchar(127) NOT NULL,
   `ville` varchar(20) NOT NULL,
   `delegation` varchar(20) NOT NULL,
   `categorie` varchar(20) NOT NULL,
   `sous_categorie` varchar(20) NOT NULL,
-  `image` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `popularite` int(3) NOT NULL,
+  `image1` varchar(50) NOT NULL,
+  `image2` varchar(50) NOT NULL,
+  `image3` varchar(50) NOT NULL,
+  `image4` varchar(50) NOT NULL,
+  `image5` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `annonce`
+-- Dumping data for table `annonce`
 --
 
-INSERT INTO `annonce` (`id`, `name`, `price`, `details`, `ville`, `delegation`, `categorie`, `sous_categorie`, `image`) VALUES
-(1, 'aaa', 50, 'aaaaaaaaaaa', '', '', '', '', ''),
-(2, '111', 20, 'sqdfgthj,kb', '', '', '', '', ''),
-(3, '115', 28, 'sqdfgthj,kb', '', '', '', '', '');
+INSERT INTO `annonce` (`id`, `name`, `price`, `details`, `ville`, `delegation`, `categorie`, `sous_categorie`, `popularite`, `image1`, `image2`, `image3`, `image4`, `image5`) VALUES
+(1, 'T-shirt ZARA Rouge', 46.9, 'T-shirt Rouge neuf taille M. Red Printed by HRX. Prix légèrement négociable. Pour les sérieux uniquement. ✅➡ Disponible à Tunis', 'Tunis', 'Centre Ville', 'mode', 'homme', 10, '', '', '', '', ''),
+(2, '111', 20, 'sqdfgthj,kb', '', '', '', '', 0, '', '', '', '', ''),
+(3, '115', 28, 'sqdfgthj,kb', '', '', '', '', 0, '', '', '', '', ''),
+(4, 'chaussures', 100, 'chaussures à vendre', 'Ariana', 'La petite ariana', 'mode ', 'homme', 0, '', '', '', '', ''),
+(5, 'potato', 3, 'potatoes for sale', '', '', '', '', 0, '', '', '', '', ''),
+(8, 'tomato', 5, 'tomatoes for sale', '', '', '', '', 0, '', '', '', '', ''),
+(9, 'KIA', 150000, 'KIA RIO à vendre', '', '', '', '', 10, '', '', '', '', ''),
+(10, 'Mercedes', 200000, 'Mercedes New New à v', '', '', '', '', 5, '', '', '', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `cart`
+-- Table structure for table `cart`
 --
 
-DROP TABLE IF EXISTS `cart`;
-CREATE TABLE IF NOT EXISTS `cart` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `pid` int NOT NULL,
+CREATE TABLE `cart` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `pid` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `price` int NOT NULL,
-  `quantity` int NOT NULL,
-  `image` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `price` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `image` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `messages`
+-- Table structure for table `messages`
 --
 
-DROP TABLE IF EXISTS `messages`;
-CREATE TABLE IF NOT EXISTS `messages` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `number` varchar(12) NOT NULL,
-  `message` varchar(500) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `message` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `messages`
+-- Dumping data for table `messages`
 --
 
 INSERT INTO `messages` (`id`, `user_id`, `name`, `email`, `number`, `message`) VALUES
@@ -116,27 +118,25 @@ INSERT INTO `messages` (`id`, `user_id`, `name`, `email`, `number`, `message`) V
 -- --------------------------------------------------------
 
 --
--- Structure de la table `orders`
+-- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE IF NOT EXISTS `orders` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
   `number` varchar(10) NOT NULL,
   `email` varchar(50) NOT NULL,
   `method` varchar(50) NOT NULL,
   `address` varchar(500) NOT NULL,
   `total_products` varchar(1000) NOT NULL,
-  `total_price` int NOT NULL,
+  `total_price` int(11) NOT NULL,
   `placed_on` date DEFAULT NULL,
-  `payment_status` varchar(20) NOT NULL DEFAULT 'pending',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `payment_status` varchar(20) NOT NULL DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `orders`
+-- Dumping data for table `orders`
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`, `payment_status`) VALUES
@@ -145,23 +145,21 @@ INSERT INTO `orders` (`id`, `user_id`, `name`, `number`, `email`, `method`, `add
 -- --------------------------------------------------------
 
 --
--- Structure de la table `products`
+-- Table structure for table `products`
 --
 
-DROP TABLE IF EXISTS `products`;
-CREATE TABLE IF NOT EXISTS `products` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `details` varchar(500) NOT NULL,
-  `price` int NOT NULL,
+  `price` int(11) NOT NULL,
   `image_01` varchar(100) NOT NULL,
   `image_02` varchar(100) NOT NULL,
-  `image_03` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `image_03` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `products`
+-- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `details`, `price`, `image_01`, `image_02`, `image_03`) VALUES
@@ -170,20 +168,18 @@ INSERT INTO `products` (`id`, `name`, `details`, `price`, `image_01`, `image_02`
 -- --------------------------------------------------------
 
 --
--- Structure de la table `users`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `password` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
@@ -197,26 +193,128 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wishlist`
+-- Table structure for table `wishlist`
 --
 
-DROP TABLE IF EXISTS `wishlist`;
-CREATE TABLE IF NOT EXISTS `wishlist` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `pid` int NOT NULL,
+CREATE TABLE `wishlist` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `pid` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `price` int NOT NULL,
-  `image` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `price` int(11) NOT NULL,
+  `image` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `wishlist`
+-- Dumping data for table `wishlist`
 --
 
 INSERT INTO `wishlist` (`id`, `user_id`, `pid`, `name`, `price`, `image`) VALUES
 (3, 1, 1, 'camera', 50, 'camera-1.webp');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `admins`
+--
+ALTER TABLE `admins`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `annonce`
+--
+ALTER TABLE `annonce`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `admins`
+--
+ALTER TABLE `admins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `annonce`
+--
+ALTER TABLE `annonce`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

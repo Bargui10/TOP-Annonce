@@ -9,29 +9,40 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-	<title>Top Annonces - Produits</title>
+	<title>Top Annonces - Details</title>
 </head>
 <body>
 
 		
-	<div class="container">
-		<div class="navbar">
-			<div class="logo">
-				<a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
-			</div>
-			<nav>
-				<ul>
-					<li><a href="index.html">Accueil</a></li>
-					<li><a href="products.html">Produits</a></li>
-					<li><a href="">Info</a></li>
-					<li><a href="">Contact</a></li>
-					<li><a href="account.html">Mon Compte</a></li>
-				</ul>
-			</nav>
-			<a href="myads.html"><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
-		</div>
+	<?php
+		require("./bases/navbar.php");
 
-	</div>
+		require("connect.php");
+		// Check if the page number is specified and check if it's a number, if not return the default page number which is 1.
+		$id = isset($_GET['id']) && is_numeric($_GET['id']) ? $_GET['id'] : 1;
+
+		$stmtCurrent = $conn->prepare('SELECT * FROM annonce where id = ?');
+		$stmtCurrent->bindParam(1, $id, PDO::PARAM_INT);
+		$stmtCurrent->execute(); 
+		$dataCurrent = $stmtCurrent->fetch();
+		echo "ID " .$dataCurrent['id']. " Name " . $dataCurrent['name'];
+
+
+		/*
+		// Number of results to show on each page.
+		$num_results_on_page = 4;
+
+		if ($stmt = $conn->prepare('SELECT * FROM annonce ORDER BY name LIMIT ?,?')) {
+
+		$stmt->bindParam(1, 1, PDO::PARAM_INT);
+		$stmt->bindParam(2, $num_results_on_page,PDO::PARAM_INT);
+
+		// Execute & Get the results...
+		$stmt->execute(); 
+		//echo("<br> Result = $result");
+		*/
+
+	?>
 
 
 <!--        Single Product Details      -->
@@ -62,9 +73,9 @@
             </div>
             <div class="col-2">
                 <p>Home / T-Shirt</p>
-                <h1>Red Printed T-Shirt by HRX</h1>
-                <h4>$50.00</h4>
-				<h4>Ville: Tunis</h4>
+                <h1><?php echo $dataCurrent['name']; ?></h1>
+                <h4>$<?php echo number_format( $dataCurrent['price'], 2); ?></h4>
+				<h4>Ville: <?php echo $dataCurrent['ville']; ?></h4>
 				<br>
 				<small>Vendeur: Foulen Ben Foulen</small>
                 <br>
@@ -74,7 +85,7 @@
 				
                 <h3>Détails du Produit <i class="fa fa-indent"></i></h3>
                 <br>
-                <p>T-shirt Rouge neuf taille M. Red Printed by HRX. Prix légèrement négociable. Pour les sérieux uniquement. ✅➡ Disponible à Tunis Centre Ville.</p>
+                <p> <?php echo $dataCurrent['details']; ?> </p>
             </div>
         </div>
     </div>
@@ -94,42 +105,10 @@
 
 	<div class="small-container">	
 		<div class="row">
-			<div class="col-4">
-				<img src="images/product-1.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			<div class="col-4">
-				<img src="images/product-2.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			<div class="col-4">
-				<img src="images/product-3.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
+
+
+			<!--        Add for loop here ( 4 items)        -->
+
 			<div class="col-4">
 				<img src="images/product-4.jpg" alt="">
 				<h4>Red Printed T-shirt</h4>
@@ -142,6 +121,8 @@
 				</div>
 				<p>$50.000</p>
 			</div>
+
+
 		</div>
 
 	</div>
