@@ -14,24 +14,11 @@
 <body>
 
     
-		<div class="container">
-			<div class="navbar">
-				<div class="logo">
-					<a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
-				</div>
-				<nav>
-					<ul>
-						<li><a href="index.html">Accueil</a></li>
-						<li><a href="products.html">Produits</a></li>
-						<li><a href="">Info</a></li>
-						<li><a href="">Contact</a></li>
-						<li><a href="account.html">Mon Compte</a></li>
-					</ul>
-				</nav>
-				<a href="myads.html"><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
-			</div>
-
-		</div>
+    <?php
+		require("./bases/navbar.php");
+		require("connect.php");
+		
+	?>
 
 
     <!--        Cart Items Details      -->
@@ -109,46 +96,9 @@
     </div>
 
 	<!--		footer		-->
-
-	<div class="footer">
-		<div class="container">
-			<div class="row">
-				<div class="footer-col-1">
-					<h3>Télécharger L'App</h3>
-					<p>Télécharger Notre Application pour Android et iOS.</p>
-					<div class="app-logo">
-						<img src="images/play-store.png" alt="">
-						<img src="images/app-store.png" alt="">
-					</div>
-				</div>
-				<div class="footer-col-2">
-					<img src="images/logo-white.png" alt="">
-					<p>Top Annonces a Pour But de Rendre les Petites Annonces Accessibles Pour Tous les Tunisien(ne)s.</p>
-				</div>
-				<div class="footer-col-3">
-					<h3>Liens Utiles</h3>
-					<ul>
-						<li>Coupons</li>
-						<li>Blog</li>
-						<li>S.A.V</li>
-						<li>Affiliale</li>
-					</ul>
-				</div>
-				<div class="footer-col-4">
-					<h3>Liens Utiles</h3>
-					<ul>
-						<li>Facebook</li>
-						<li>Twitter</li>
-						<li>Instagram</li>
-						<li>Youtube</li>
-					</ul>
-				</div>
-			</div>
-			<hr>
-			<p class="copyright">Copyright 2022 FBS & IB</p>
-
-		</div>
-	</div>
+	<?php
+		require("./bases/footer.php")
+	?>
 
 
 

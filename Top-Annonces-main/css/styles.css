@@ -85,10 +85,11 @@ p{
 
 .header{
     background: radial-gradient(#fff, #d6e4ff);
+    
 }
 
 .header .row{
-    margin-top: 70px;
+    margin-top: 10px;
 }
 
 .categories{

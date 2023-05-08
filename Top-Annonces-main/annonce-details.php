@@ -128,46 +128,9 @@
 	</div>
 
 	<!--		footer		-->
-
-	<div class="footer">
-		<div class="container">
-			<div class="row">
-				<div class="footer-col-1">
-					<h3>Télécharger L'App</h3>
-					<p>Télécharger Notre Application pour Android et iOS.</p>
-					<div class="app-logo">
-						<img src="images/play-store.png" alt="">
-						<img src="images/app-store.png" alt="">
-					</div>
-				</div>
-				<div class="footer-col-2">
-					<img src="images/logo-white.png" alt="">
-					<p>Top Annonces a Pour But de Rendre les Petites Annonces Accessibles Pour Tous les Tunisien(ne)s.</p>
-				</div>
-				<div class="footer-col-3">
-					<h3>Liens Utiles</h3>
-					<ul>
-						<li>Coupons</li>
-						<li>Blog</li>
-						<li>S.A.V</li>
-						<li>Affiliale</li>
-					</ul>
-				</div>
-				<div class="footer-col-4">
-					<h3>Liens Utiles</h3>
-					<ul>
-						<li>Facebook</li>
-						<li>Twitter</li>
-						<li>Instagram</li>
-						<li>Youtube</li>
-					</ul>
-				</div>
-			</div>
-			<hr>
-			<p class="copyright">Copyright 2022 FBS & IB</p>
-
-		</div>
-	</div>
+	<?php
+		require("./bases/footer.php")
+	?>
 
 
 
