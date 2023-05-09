@@ -1,3 +1,17 @@
+<?php
+
+include 'connect.php';
+
+session_start();
+
+$admin_id = $_SESSION['admin_id'];
+
+if(!isset($admin_id)){
+   header('location:login_admin.php');
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +53,7 @@
         <h2>Administrateur</h2>
         <hr>
         <h3>ANNONCES</h3>
-        <a href="publish.html" class="btn">Ajouter Une Annonce</a>
+        <a href="publish.php" class="btn">Ajouter Une Annonce</a>
 
         <table>
             <tr>

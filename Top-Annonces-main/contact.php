@@ -15,30 +15,25 @@ if(isset($_POST['send'])){
    $name = filter_var($name, FILTER_SANITIZE_STRING);
    $email = $_POST['email'];
    $email = filter_var($email, FILTER_SANITIZE_STRING);
-   $number = $_POST['number'];
-   $number = filter_var($number, FILTER_SANITIZE_STRING);
-   $msg = $_POST['msg'];
-   $msg = filter_var($msg, FILTER_SANITIZE_STRING);
+   $message = $_POST['message'];
+   $message = filter_var($message, FILTER_SANITIZE_STRING);
 
-   $select_message = $conn->prepare("SELECT * FROM `messages` WHERE name = ? AND email = ? AND number = ? AND message = ?");
-   $select_message->execute([$name, $email, $number, $msg]);
+   $select_message = $conn->prepare("SELECT * FROM `messages` WHERE name = ? AND email = ? AND message = ?");
+   $select_message->execute([$name, $email, $message]);
 
    if($select_message->rowCount() > 0){
-      $message[] = 'already sent message!';
+      $message1[] = 'already sent message!';
    }else{
 
-      $insert_message = $conn->prepare("INSERT INTO `messages`(user_id, name, email, number, message) VALUES(?,?,?,?,?)");
-      $insert_message->execute([$user_id, $name, $email, $number, $msg]);
+      $insert_message = $conn->prepare("INSERT INTO `messages`(user_id, name, email,  message) VALUES(?,?,?,?)");
+      $insert_message->execute([$user_id, $name, $email, $message]);
 
-      $message[] = 'sent message successfully!';
+      $message1[] = 'sent message successfully!';
 
    }
 
 }
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +50,7 @@ if(isset($_POST['send'])){
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
    <!-- custom css file link  -->
-   <link rel="stylesheet" href="css/style1.css">
+   <link rel="stylesheet" href="css1/style.css">
 
 </head>
 <body>
@@ -66,11 +61,11 @@ if(isset($_POST['send'])){
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="products.html">Produits</a></li>
+                    <li><a href="index.php">Accueil</a></li>
+                    <li><a href="products.php">Produits</a></li>
                     <li><a href="">Info</a></li>
                     <li><a href="index.php">Contact</a></li>
-                    <li><a href="account.html">Mon Compte</a></li>
+                    <li><a href="account.php">Mon Compte</a></li>
                 </ul>
             </nav>
             <a href=""  ><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
@@ -79,56 +74,32 @@ if(isset($_POST['send'])){
     </div>
 
 
-<section class="contact">
+    <div class="wrapper">
+			<div class="inner">
+				<form action="" method="post">
+					<h3>Nous Contacter</h3>
+				
+					<label class="form-group">
+						<input type="text" class="form-control" name="name"  required>
+						<span>Nom</span>
+						<span class="border"></span>
+					</label>
+					<label class="form-group">
+						<input type="text"  name="email"class="form-control"  required>
+						<span for="">Mail</span>
+						<span class="border"></span>
+					</label>
+					<label class="form-group" >
+						<textarea name="message" id="" class="form-control" required></textarea>
+						<span for="">Votre message!</span>
+						<span class="border"></span>
+					</label>
+					<button type="submit" name="send">Envoyer 
+						<i class="zmdi zmdi-arrow-right"></i>
 
-    <form action="" method="post">
-        <h3>Contact US</h3>
-        <input type="text" name="name" placeholder="enter your name" required maxlength="20" class="box">
-        <input type="email" name="email" placeholder="enter your email" required maxlength="50" class="box">
-        <input type="number" name="number" min="0" max="9999999999" placeholder="enter your number" required onkeypress="if(this.value.length == 10) return false;" class="box">
-        <textarea name="msg" class="box" placeholder="enter your message" cols="30" rows="10"></textarea>
-        <input type="submit" value="send message" name="send" class="btn">
-    </form>
-
-</section>
-    <div class="footer">
-		<div class="container">
-			<div class="row">
-				<div class="footer-col-1">
-					<h3>Télécharger L'App</h3>
-					<p>Télécharger Notre Application pour Android et iOS.</p>
-					<div class="app-logo">
-						<img src="images/play-store.png" alt="">
-						<img src="images/app-store.png" alt="">
-					</div>
-				</div>
-				<div class="footer-col-2">
-					<img src="images/logo-white.png" alt="">
-					<p>Top Annonces a Pour But de Rendre les Petites Annonces Accessibles Pour Tous les Tunisien(ne)s.</p>
-				</div>
-				<div class="footer-col-3">
-					<h3>Liens Utiles</h3>
-					<ul>
-						<li>Coupons</li>
-						<li>Blog</li>
-						<li>S.A.V</li>
-						<li>Affiliale</li>
-					</ul>
-				</div>
-				<div class="footer-col-4">
-					<h3>Liens Utiles</h3>
-					<ul>
-						<li>Facebook</li>
-						<li>Twitter</li>
-						<li>Instagram</li>
-						<li>Youtube</li>
-					</ul>
-				</div>
+ 			</form>
 			</div>
-			<hr>
-			<p class="copyright">Copyright 2022 FBS & IB</p>
-
-		</div>
 	</div>
+    
 </body>
 </html>

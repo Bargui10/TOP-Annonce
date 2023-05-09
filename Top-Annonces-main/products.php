@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +15,8 @@
 		
 	<!--navbar-->
 	<?php
-		require("./bases/navbar.php")
-		require("connect.php")
+		require("./bases/navbar.php");
+		require("connect.php");
 
 		// Get the total number of records from our table "students".
 		$total_pages = $conn->query('SELECT * FROM produits')->num_rows;
@@ -35,6 +34,7 @@
 		$stmt->execute(); 
 		// Get the results...
 		$result = $stmt->get_result();
+		}
 	?>
 
 	<div class="small-container">	
@@ -227,8 +227,10 @@
 
 	<!--		footer		-->
 	<?php
-		require("./bases/footer.php")
+		require("./bases/footer.php");
 	?>
 
 </body>
+		
 </html>
+		

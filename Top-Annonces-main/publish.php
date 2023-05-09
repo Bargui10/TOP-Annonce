@@ -36,7 +36,7 @@ if(isset($_POST['add_product'])){
    $image = filter_var($image, FILTER_SANITIZE_STRING);
    $image_size_01 = $_FILES['image']['size'];
    $image_tmp_name_01 = $_FILES['image']['tmp_name'];
-   $image_folder_01 = '../uploaded_img/'.$image;
+   $image_folder_01 = 'uploaded_img/'.$image;
 
   
 
@@ -55,14 +55,9 @@ if(isset($_POST['add_product'])){
             $message[] = 'image size is too large!';
          }else{
             move_uploaded_file($image_tmp_name_01, $image_folder_01);
-            $message[] = 'new annonce added!';
-         }
-
-      }
-
-   }  
-
-};
+            $message[] = 'Annonce ajoutée avec succès!';
+         } }
+    }};
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,6 +97,19 @@ if(isset($_POST['add_product'])){
     <div class="container publish-page">
         <h2>Publiez Une Nouvelle Annonce</h2>
         <hr>
+                    <?php
+                        if(isset($message)){
+                        foreach($message as $message){
+                            echo '
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span>'.$message.'</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            ';
+                        }
+                        }
+            ?>
+
 
         <div class="row">
            
@@ -112,7 +120,7 @@ if(isset($_POST['add_product'])){
                     </div>
 
                     
-                    <form id="AjoutForm" method="post">
+                    <form id="" method="post" enctype="multipart/form-data">
                         <div class="row">
                                 <input type="text" placeholder="Titre" name ="name">
                             
@@ -126,49 +134,50 @@ if(isset($_POST['add_product'])){
 
                         <select name="ville" id="">
                             <option value="">Ville</option>
-                            <option value="">Ariana</option>
-                            <option value="">Ben Arous</option>
-                            <option value="">Bizerte</option>
-                            <option value="">Béja</option>
-                            <option value="">Gabes</option>
-                            <option value="">Gafsa</option>
-                            <option value="">Jendouba</option>
-                            <option value="">Kairouan</option>
-                            <option value="">Kasserine</option>
-                            <option value="">Kébili</option>
-                            <option value="">La Manouba</option>
-                            <option value="">Le Kef</option>
-                            <option value="">Mahdia</option>
-                            <option value="">Monastir</option>
-                            <option value="">Médenine</option>
-                            <option value="">Nabeul</option>
-                            <option value="">Sfax</option>
-                            <option value="">Sidi Bou Zid</option>
-                            <option value="">Siliana</option>
-                            <option value="">Sousse</option>
-                            <option value="">Tataouine</option>
-                            <option value="">Tozeur</option>
-                            <option value="">Tunis</option>
-                            <option value="">Zaghouan</option>
+                            <option value="Ariana">Ariana</option>
+                            <option value="Ben Arous">Ben Arous</option>
+                            <option value="Bizerte">Bizerte</option>
+                            <option value="Béja">Béja</option>
+                            <option value="Gabes">Gabes</option>
+                            <option value="Gafsa">Gafsa</option>
+                            <option value="Jendouba">Jendouba</option>
+                            <option value="Kairouan">Kairouan</option>
+                            <option value="Kasserine">Kasserine</option>
+                            <option value="Kébili">Kébili</option>
+                            <option value="La Manouba">La Manouba</option>
+                            <option value="Le Kef">Le Kef</option>
+                            <option value="Mahdia">Mahdia</option>
+                            <option value="Monastir">Monastir</option>
+                            <option value="Médenine">Médenine</option>
+                            <option value="Nabeul">Nabeul</option>
+                            <option value="Sfax">Sfax</option>
+                            <option value="Sidi Bou Zid">Sidi Bou Zid</option>
+                            <option value="Siliana">Siliana</option>
+                            <option value="Sousse">Sousse</option>
+                            <option value="Tataouine">Tataouine</option>
+                            <option value="Tozeur">Tozeur</option>
+                            <option value="Tunis">Tunis</option>
+                            <option value="Zaghouan">Zaghouan</option>
                         </select>
+
                         <select name="delegation" id="">
-                            <option value="">Délégation</option>
-                            <option value="">Autres Villes</option>
+                            <option value="delegation">Délégation</option>
+                            <option value="autre">Autres Villes</option>
                         </select>
                         <select name="categorie" id="">
                             <option value="">Catégorie</option>
-                            <option value="">Véhicules</option>
-                            <option value="">MAison et Jardin</option>
-                            <option value="">Emploi et Services</option>
-                            <option value="">Immobilier</option>
-                            <option value="">Habillement et Bien Etre</option>
-                            <option value="">Informatique et Multimédia</option>
-                            <option value="">Loisirs et Divertissement</option>
-                            <option value="">Autres</option>
+                            <option value="vehicules">Véhicules</option>
+                            <option value="maison et jardin">MAison et Jardin</option>
+                            <option value="emploi et services">Emploi et Services</option>
+                            <option value="immobilier">Immobilier</option>
+                            <option value="habillement et bien etre">Habillement et Bien Etre</option>
+                            <option value="informatique et multimédia">Informatique et Multimédia</option>
+                            <option value="loisirs et divertissement">Loisirs et Divertissement</option>
+                            <option value="autres">Autres</option>
                         </select>
                         <select name="sous_categorie" id="">
-                            <option value="">Sous-catégorie</option>
-                            <option value="">Autres</option>
+                            <option value="sous-catégorie">Sous-catégorie</option>
+                            <option value="autre">Autres</option>
                         </select>
                         <br>
                      

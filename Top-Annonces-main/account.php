@@ -1,3 +1,65 @@
+<?php
+
+include 'connect.php';
+
+session_start();
+
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
+}else{
+   $user_id = '';
+};
+
+if(isset($_POST['submit'])){
+
+   $name = $_POST['name'];
+   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $pass = sha1($_POST['pass']);
+   $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+   $cpass = sha1($_POST['cpass']);
+   $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
+
+   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
+   $select_user->execute([$email,]);
+   $row = $select_user->fetch(PDO::FETCH_ASSOC);
+
+   if($select_user->rowCount() > 0){
+      $message[] = 'email already exists!';
+   }else{
+      if($pass != $cpass){
+         $message[] = 'confirm password not matched!';
+      }else{
+         $insert_user = $conn->prepare("INSERT INTO `users`(name, email, password) VALUES(?,?,?)");
+         $insert_user->execute([$name, $email, $cpass]);
+         $message[] = 'registered successfully, login now please!';
+         
+      }
+   }
+   
+   }
+
+ if(isset($_POST['submit1'])){
+
+    $email = $_POST['email'];
+    $email = filter_var($email, FILTER_SANITIZE_STRING);
+    $pass = sha1($_POST['pass']);
+    $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+ 
+    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ?");
+    $select_user->execute([$email, $pass]);
+    $row = $select_user->fetch(PDO::FETCH_ASSOC);
+ 
+    if($select_user->rowCount() > 0){
+       $_SESSION['user_id'] = $row['id'];
+       header('location:index.php');
+    }else{
+       $message[] = 'incorrect username or password!';      
+    }
+ 
+ }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,14 +68,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
 	<link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/cssMes.css">
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<title>Top Annonces - Produits</title>
 </head>
 <body>
-    <div class="container">
-        <div class="navbar">
+
+
+
+
+<div class="container">
+    <div class="navbar">
             <div class="logo">
                 <a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
             </div>
@@ -31,14 +99,26 @@
 
     </div>
 
-
-    <!--        Account Page        -->
+     <!--        Account Page        -->
     <div class="account-page">
         <div class="container">
+        <?php
+                        if(isset($message)){
+                            foreach($message as $message){
+                                echo '
+                                <div class="message">
+                                    <span>'.$message.'</span>
+                                    <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+                                </div>
+                                ';
+                            }
+                        }
+                        ?>
             <div class="row">
                 <div class="col-2">
                     <img src="images/image1.png" alt="" width="100%">
                 </div>
+                
                 <div class="col-2">
                     <div class="form-container">
                         <div class="form-btn">
@@ -46,28 +126,31 @@
                             <span onclick="register()">Register</span>
                             <hr id="Indicator">
                         </div>
-                        <form id="LoginForm" action="login.php" method="post">
+                       
+                        <form id="LoginForm" action="" method="post">
                             <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-                            <input type="submit" value="login now" class="btn" name="submit">
+                            <input type="submit" value="login now" class="btn" name="submit1">
                         </form>
-                        <form id="RegisterForm" action="register.php" method="post">
+                        <form id="RegisterForm" action="" method="post">
                             <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box">
                             <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="submit" value="register now" class="btn" name="submit">
-                            
-                         </form>
+                        </form>
                       
                     </div>
                 </div>
+                
+
+              
+              
             </div>
         </div>
     </div>
 
-
-
+  
 	<!--		footer		-->
 
 	<div class="footer">
