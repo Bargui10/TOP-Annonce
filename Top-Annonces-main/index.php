@@ -58,9 +58,9 @@
 								
 							</div>
 							<div class="row">
-									<input type="number" placeholder="Minimum">
+									<input type="number" placeholder="Prix Minimum">
 
-									<input type="number" placeholder="Maximum">
+									<input type="number" placeholder="Prix Maximum">
 
 							</div>
 							
@@ -331,10 +331,73 @@
 		</div>
 	</div>
 
+
+
+
 	<!--		TESTIMONIALS		-->
 	<div class="testimonial">
 		<div class="small-container">
 			<div class="row">
+				<!--INDIV TESTIMONIAL-->
+				<?php
+					$stmt = $conn->prepare('SELECT * FROM avis ORDER BY rating DESC LIMIT 0,3'); 
+					if ($stmt) {
+						# code...
+						$stmt->execute(); 
+						$rows = $stmt->rowCount();
+						$data = $stmt->fetchAll();
+
+						foreach ($data as $col) {
+							# code...
+							$stmtImage = $conn->prepare('SELECT name,image FROM users WHERE id = ?'); 
+							$stmtImage->bindParam(1, $col[2], PDO::PARAM_INT);
+							$stmtImage->execute();
+							$dataUser = $stmtImage->fetch();
+							echo('
+							<div class="col-3">
+								<i class="fa fa-quote-left" ></i>
+
+								<p>'.$col[1].'</p>	<!-- avis.description -->
+								<div class="rating">
+								
+							');//<!--echo end-->
+								$avis = $col[3];
+								for ($i=1; $i <= $avis ; $i++) { 
+									# code...
+									echo('<i class="fa fa-star" ></i>');
+
+								}
+								if ($avis < 5) {
+									# code...
+									$total = $avis;
+									while ($total < 5) {
+										# code...
+										echo('<i class="fa fa-star-o" ></i>');
+										$total +=1;
+									}
+								}
+								
+								//<!--echo start-->
+								echo('
+								</div>
+								<img src="images/'.$dataUser[2].'" alt="">
+								<h3>'.$dataUser[1].'</h3> <!-- user.name -->
+							</div>
+							');
+
+						}
+					}
+				?>
+			</div>
+		</div>
+	</div>
+
+
+<!--		TESTIMONIALS		-->
+	<div class="testimonial">
+		<div class="small-container">
+			<div class="row">
+				<!--INDIV TESTIMONIAL-->
 				<div class="col-3">
 					<i class="fa fa-quote-left" ></i>
 
@@ -349,34 +412,7 @@
 					<img src="images/user-1.png" alt="">
 					<h3>Alice Parker</h3>
 				</div>
-				<div class="col-3">
-					<i class="fa fa-quote-left" ></i>
-
-					<p>Une des meilleures expériences de vente en ligne grace aux annonces de Top Annonces! Merci.</p>
-					<div class="rating">
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star-o" ></i>
-					</div>
-					<img src="images/user-2.png" alt="">
-					<h3>Ken Adams</h3>
-				</div>
-				<div class="col-3">
-					<i class="fa fa-quote-left" ></i>
-
-					<p>J'utilise cette plateforme depuis des années et elle ne cesse de me surprendre! 20/20 !</p>
-					<div class="rating">
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-					</div>
-					<img src="images/user-3.png" alt="">
-					<h3>Regina Phalange</h3>
-				</div>
+				
 			</div>
 		</div>
 	</div>

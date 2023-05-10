@@ -1,5 +1,5 @@
 <?php
-
+ // no longer needed, this is moved to login_admin.php
 include 'connect.php';
 
 session_start();
@@ -17,9 +17,9 @@ if(isset($_POST['submit'])){
 
    if($select_admin->rowCount() > 0){
       $_SESSION['admin_id'] = $row['id'];
-      header('location:admin.html');
+      header('location:admin.php');
    }else{
-      //header('location:login_admin.html');
+      //header('location:login_admin.php');
       $message[] = 'incorrect username or password!';
    }
 

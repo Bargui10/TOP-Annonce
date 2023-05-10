@@ -15,7 +15,11 @@
 	                if(isset($_SESSION['user_id'])){
 		                $user_id = $_SESSION['user_id'];
                         echo("<li><a href='myads.php'>Mon Compte<img src='images/storefront.png' alt='' width='35px' height='35px'></a></li>");
- 	                }else{
+ 	                }elseif(isset($_SESSION['admin_id'])){
+						$admin_id = $_SESSION['admin_id'];
+                        echo("<li><a href='admin.php'>Page Admin</a></li>");
+					}
+					else{
 		                $user_id = '';
                         echo("<li><a href='account.php'>Login</a></li>");
  	                };

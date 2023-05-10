@@ -18,6 +18,30 @@
 		require("connect.php");
 		
 	?>
+    <?php
+
+        if(isset($_POST['submit'])){
+
+        $name = $_POST['name'];
+        $name = filter_var($name, FILTER_SANITIZE_STRING);
+        $pass = sha1($_POST['pass']);
+        $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+
+        $select_admin = $conn->prepare("SELECT * FROM `admins` WHERE name = ? AND password = ?");
+        $select_admin->execute([$name, $pass]);
+        $row = $select_admin->fetch(PDO::FETCH_ASSOC);
+
+        if($select_admin->rowCount() > 0){
+            $_SESSION['admin_id'] = $row['id'];
+            header('location:admin.php');
+        }else{
+            //header('location:login_admin.php');
+            $message[] = 'incorrect username or password!';
+        }
+
+        }
+
+    ?>
 
 
     <!--        Account Page        -->
@@ -32,7 +56,7 @@
                     <div class="form-container">
                         <span > Admin Login</span>
 
-                         <form action="login_html.php" method="post">
+                         <form action="" method="post">
                             <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="submit" value="login now" class="btn" name="submit">

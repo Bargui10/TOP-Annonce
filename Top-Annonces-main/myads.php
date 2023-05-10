@@ -31,6 +31,13 @@
         <br>
         <small>Date d'inscription: 11/12/2022</small>
         <hr><br>
+
+
+        <?php
+            echo("Session email: ".$_SESSION['email']."<br> Session user_id: " .$_SESSION['user_id']);
+            require("addRating.php");
+        ?>
+
         <h2>Mes Annonces</h2>
         <br>
         <a href="publish.html" class="btn">Ajouter Une Annonce</a>

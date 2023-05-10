@@ -28,11 +28,47 @@
 		// Number of results to show on each page.
 		$num_results_on_page = 6;
 
-		if ($stmt = $conn->prepare('SELECT * FROM annonce ORDER BY name LIMIT ?,?')) {
+		// Check TRI Type 
+		  
+        if(!empty($_GET['tri_submit'])){  
+			if(!empty($_GET['tri_choix'])) {  
+				$selected = $_GET['tri_choix'];  
+				echo 'You have chosen: ' . $selected;  
+				$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY ? LIMIT ?,?'); 
+				$stmt->bindParam(1, $selected);
+
+				$getted = "YES";
+				
+
+			} else {  
+				echo 'Please select the value. Going default..'; 
+				$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY name LIMIT ?,?'); 
+				$getted = "NO";
+			}  
+
+			
+        } else{
+			$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY name LIMIT ?,?'); 
+			$getted = "NO NO";
+		}
+
+		echo " GET = " .$getted;
+
+		
+
+		if ($stmt) {
 		// Calculate the page to get the results we need from our table.
 		$calc_page = ($page - 1) * $num_results_on_page;
-		$stmt->bindParam(1, $calc_page, PDO::PARAM_INT);
-		$stmt->bindParam(2, $num_results_on_page,PDO::PARAM_INT);
+		if ($getted=="YES") {
+			# code...
+			$stmt->bindParam(2, $calc_page, PDO::PARAM_INT);
+			$stmt->bindParam(3, $num_results_on_page,PDO::PARAM_INT);
+		}else {
+			# code...
+			$stmt->bindParam(1, $calc_page, PDO::PARAM_INT);
+			$stmt->bindParam(2, $num_results_on_page,PDO::PARAM_INT);
+		}
+		
 
 		// Execute & Get the results...
 		$stmt->execute(); 
@@ -44,13 +80,16 @@
         
         <div class="row row-2">
             <h2>Annonces</h2>
-            <select name="" id="">
-                <option value="tri_defaut">Tri par défaut</option>
-                <option value="tri_prix_asc">Trier par prix ascendant</option>
-				<option value="tri_prix_desc">Trier par prix descendant</option>
-                <option value="tri_popularite">Trier par popularité</option>
-                <option value="tri_avis">Trier par avis</option>
-            </select>
+			<form action="" method="get">
+				<select name="tri_choix" id="">
+					<option value="name">Tri par défaut</option>
+					<option value="price ASC">Trier par prix ascendant</option>
+					<option value="price DESC">Trier par prix descendant</option>
+					<option value="popularite DESC">Trier par popularité</option>
+				</select>
+				<input style="width:20%;" type = "submit" name = "tri_submit" value = "OK">  
+			</form>
+            
         </div>
 
 			<!--

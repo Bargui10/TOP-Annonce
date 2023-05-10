@@ -1,13 +1,13 @@
 <?php
 include 'connect.php';
 
-session_start();
+//session_start();
 
-$admin_id = $_SESSION['admin_id'];
+//$admin_id = $_SESSION['admin_id'];
 
-if(!isset($admin_id)){
+/*if(!isset($admin_id)){
    header('location:login_admin.php');
-};
+};*/
 
 if(isset($_POST['add_product'])){
 
@@ -32,11 +32,15 @@ if(isset($_POST['add_product'])){
    $sous_categorie = $_POST['sous_categorie'];
    $sous_categorie = filter_var($sous_categorie, FILTER_SANITIZE_STRING);
 
-   $image = $_FILES['image']['name'];
+   if (isset($image)) {
+    # code...
+    $image = $_FILES['image']['name'];
    $image = filter_var($image, FILTER_SANITIZE_STRING);
    $image_size_01 = $_FILES['image']['size'];
    $image_tmp_name_01 = $_FILES['image']['tmp_name'];
    $image_folder_01 = '../uploaded_img/'.$image;
+   }
+   
 
   
 
