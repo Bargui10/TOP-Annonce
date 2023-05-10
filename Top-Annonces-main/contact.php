@@ -1,13 +1,29 @@
-<?php
 
-include 'connect.php';
-session_start();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="css/styles.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-if(isset($_SESSION['user_id'])){
-   $user_id = $_SESSION['user_id'];
-}else{
-   $user_id = '';
-};
+   <title>contact</title>
+ 
+   <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="css1/style.css">
+
+</head>
+<body>  
+   <?php include "./bases/navbar.php"; ?>
+   <?php
+
+   include 'connect.php';
+
 
 if(isset($_POST['send'])){
 
@@ -34,44 +50,7 @@ if(isset($_POST['send'])){
 
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="css/styles.css">
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-   <title>contact</title>
- 
-   <!-- font awesome cdn link  -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
-   <!-- custom css file link  -->
-   <link rel="stylesheet" href="css1/style.css">
-
-</head>
-<body>
-    <div class="container">
-        <div class="navbar">
-            <div class="logo">
-                <a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="index.php">Accueil</a></li>
-                    <li><a href="products.php">Produits</a></li>
-                    <li><a href="">Info</a></li>
-                    <li><a href="index.php">Contact</a></li>
-                    <li><a href="account.php">Mon Compte</a></li>
-                </ul>
-            </nav>
-            <a href=""  ><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
-        </div>
-
-    </div>
 
 
     <div class="wrapper">

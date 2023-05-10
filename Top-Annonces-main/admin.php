@@ -31,18 +31,18 @@ if(!isset($admin_id)){
 		<div class="container">
 			<div class="navbar">
 				<div class="logo">
-					<a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
+					<a href="index.php"><img src="images/logo.png" width="125px" alt="logo"> </a>
 				</div>
 				<nav>
 					<ul>
-						<li><a href="index.html">Accueil</a></li>
-						<li><a href="products.html">Produits</a></li>
-						<li><a href="">Info</a></li>
-						<li><a href="">Contact</a></li>
-						<li><a href="account.html">Mon Compte</a></li>
+						<li><a href="index.php">Accueil</a></li>
+						<li><a href="products.php">Produits</a></li>
+						<li><a href="info.php">Info</a></li>
+						<li><a href="contact.php">Contact</a></li>
+						<li><a href="account.php">Mon Compte</a></li>
 					</ul>
 				</nav>
-				<a href="myads.html"><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
+				<a href="myads.php"><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
 			</div>
 
 		</div>

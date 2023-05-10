@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="navbar">
 		<div class="logo">
-			<a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
+			<a href="index.php"><img src="images/logo.png" width="125px" alt="logo"> </a>
 		</div>
 		<nav>
 			<ul>
@@ -14,7 +14,7 @@
                     
 	                if(isset($_SESSION['user_id'])){
 		                $user_id = $_SESSION['user_id'];
-                        echo("<li><a href='myads.php'>Mon Compte<img src='images/storefront.png' alt='' width='35px' height='35px'></a></li>");
+                        echo("<li><a href='user_account.php'>Mon Compte<img src='images/storefront.png' alt='' width='35px' height='35px'></a></li>");
  	                }else{
 		                $user_id = '';
                         echo("<li><a href='account.php'>Login</a></li>");

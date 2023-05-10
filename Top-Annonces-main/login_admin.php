@@ -63,8 +63,8 @@ if(isset($message)){
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="products.html">Produits</a></li>
+                    <li><a href="index.php">Accueil</a></li>
+                    <li><a href="products.php">Produits</a></li>
                     <li><a href="">Info</a></li>
                     <li><a href="index.php">Contact</a></li>
                     <li><a href="account.php">Mon Compte</a></li>

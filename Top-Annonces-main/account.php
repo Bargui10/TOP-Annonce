@@ -1,14 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/cssMes.css">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title>Top Annonces - Produits</title>
+</head>
+<body>
+
+
+<?php 
+	require("./bases/navbar.php");
+
+
+?>    
 <?php
 
 include 'connect.php';
-
-session_start();
-
-if(isset($_SESSION['user_id'])){
-   $user_id = $_SESSION['user_id'];
-}else{
-   $user_id = '';
-};
 
 if(isset($_POST['submit'])){
 
@@ -59,47 +75,9 @@ if(isset($_POST['submit'])){
     }
  
  }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/cssMes.css">
+?> 
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-	<title>Top Annonces - Produits</title>
-</head>
-<body>
-
-
-
-
-<div class="container">
-    <div class="navbar">
-            <div class="logo">
-                <a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="products.html">Produits</a></li>
-                    <li><a href="">Info</a></li>
-                    <li><a href="index.php">Contact</a></li>
-                    <li><a href="account.html">Mon Compte</a></li>
-                </ul>
-            </nav>
-            <a href=""  ><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
-        </div>
-
-    </div>
-
-     <!--        Account Page        -->
+<!--        Account Page        -->
     <div class="account-page">
         <div class="container">
         <?php
