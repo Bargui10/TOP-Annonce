@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2023 at 12:43 PM
+-- Generation Time: May 10, 2023 at 11:06 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -48,6 +48,7 @@ INSERT INTO `admins` (`id`, `name`, `password`) VALUES
 
 CREATE TABLE `annonce` (
   `id` int(11) NOT NULL,
+  `idvendeur` int(3) NOT NULL,
   `name` varchar(50) NOT NULL,
   `price` float NOT NULL,
   `details` varchar(127) NOT NULL,
@@ -55,7 +56,9 @@ CREATE TABLE `annonce` (
   `delegation` varchar(20) NOT NULL,
   `categorie` varchar(20) NOT NULL,
   `sous_categorie` varchar(20) NOT NULL,
+  `datepublication` date NOT NULL DEFAULT current_timestamp(),
   `popularite` int(3) NOT NULL,
+  `signals` int(3) NOT NULL DEFAULT 0,
   `image1` varchar(50) NOT NULL,
   `image2` varchar(50) NOT NULL,
   `image3` varchar(50) NOT NULL,
@@ -67,15 +70,69 @@ CREATE TABLE `annonce` (
 -- Dumping data for table `annonce`
 --
 
-INSERT INTO `annonce` (`id`, `name`, `price`, `details`, `ville`, `delegation`, `categorie`, `sous_categorie`, `popularite`, `image1`, `image2`, `image3`, `image4`, `image5`) VALUES
-(1, 'T-shirt ZARA Rouge', 46.9, 'T-shirt Rouge neuf taille M. Red Printed by HRX. Prix légèrement négociable. Pour les sérieux uniquement. ✅➡ Disponible à Tunis', 'Tunis', 'Centre Ville', 'mode', 'homme', 10, '', '', '', '', ''),
-(2, '111', 20, 'sqdfgthj,kb', '', '', '', '', 0, '', '', '', '', ''),
-(3, '115', 28, 'sqdfgthj,kb', '', '', '', '', 0, '', '', '', '', ''),
-(4, 'chaussures', 100, 'chaussures à vendre', 'Ariana', 'La petite ariana', 'mode ', 'homme', 0, '', '', '', '', ''),
-(5, 'potato', 3, 'potatoes for sale', '', '', '', '', 0, '', '', '', '', ''),
-(8, 'tomato', 5, 'tomatoes for sale', '', '', '', '', 0, '', '', '', '', ''),
-(9, 'KIA', 150000, 'KIA RIO à vendre', '', '', '', '', 10, '', '', '', '', ''),
-(10, 'Mercedes', 200000, 'Mercedes New New à v', '', '', '', '', 5, '', '', '', '', '');
+INSERT INTO `annonce` (`id`, `idvendeur`, `name`, `price`, `details`, `ville`, `delegation`, `categorie`, `sous_categorie`, `datepublication`, `popularite`, `signals`, `image1`, `image2`, `image3`, `image4`, `image5`) VALUES
+(1, 1, 'T-shirt ZARA Rouge', 46.9, 'T-shirt Rouge neuf taille M. Red Printed by HRX. Prix légèrement négociable. Pour les sérieux uniquement. ✅➡ Disponible à Tunis', 'Tunis', 'Centre Ville', 'mode', 'homme', '2023-05-10', 10, 12, 'gallery-1.jpg', 'gallery-2.jpg', 'gallery-3.jpg', 'gallery-4.jpg', ''),
+(2, 0, '111', 20, 'sqdfgthj,kb', '', '', '', '', '2023-05-10', 0, 1, '', '', '', '', ''),
+(3, 0, '115', 28, 'sqdfgthj,kb', '', '', '', '', '2023-05-10', 0, 1, '', '', '', '', ''),
+(4, 0, 'chaussures', 100, 'chaussures à vendre', 'Ariana', 'La petite ariana', 'mode ', 'homme', '2023-05-10', 0, 1, '', '', '', '', ''),
+(5, 0, 'potato', 3, 'potatoes for sale', '', '', '', '', '2023-05-10', 0, 0, '', '', '', '', ''),
+(8, 0, 'tomato', 5, 'tomatoes for sale', '', '', '', '', '2023-05-10', 0, 0, '', '', '', '', ''),
+(9, 0, 'KIA', 150000, 'KIA RIO à vendre', '', '', '', '', '2023-05-10', 10, 0, '', '', '', '', ''),
+(10, 0, 'Mercedes', 200000, 'Mercedes New New à v', '', '', '', '', '2023-05-10', 5, 0, '', '', '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `avis`
+--
+
+CREATE TABLE `avis` (
+  `id` int(11) NOT NULL,
+  `description` varchar(256) NOT NULL,
+  `suggestion` varchar(256) DEFAULT NULL,
+  `user` int(3) NOT NULL,
+  `rating` int(1) NOT NULL DEFAULT 0,
+  `image` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `avis`
+--
+
+INSERT INTO `avis` (`id`, `description`, `suggestion`, `user`, `rating`, `image`) VALUES
+(1, 'Top Annonces est un site magnifique qui a une interface utilisateur ergonomique.', NULL, 1, 4, NULL),
+(2, 'Une des meilleures expériences de vente en ligne grace aux annonces de Top Annonces! Merci.', NULL, 2, 3, NULL),
+(3, 'J\'utilise cette plateforme depuis des années et elle ne cesse de me surprendre! 20/20 !', NULL, 7, 5, NULL),
+(4, 'great experice so far', 'nothing to add', 7, 5, NULL),
+(5, 'Not that good', 'not yet', 7, 2, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `banned`
+--
+
+CREATE TABLE `banned` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `datenaissance` date DEFAULT NULL,
+  `image` varchar(64) DEFAULT NULL,
+  `role` varchar(16) NOT NULL DEFAULT 'utilisateur',
+  `telephone` int(16) DEFAULT NULL,
+  `cin` int(8) DEFAULT NULL,
+  `nom` varchar(32) DEFAULT NULL,
+  `prenom` varchar(32) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `banned`
+--
+
+INSERT INTO `banned` (`id`, `name`, `email`, `password`, `datenaissance`, `image`, `role`, `telephone`, `cin`, `nom`, `prenom`) VALUES
+(3, 'aaa', 'aaa@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730', NULL, NULL, 'utilisateur', NULL, NULL, NULL, NULL),
+(4, 'foulenbenfoulen', 'foulen@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730', NULL, NULL, 'utilisateur', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -175,20 +232,26 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(50) NOT NULL,
+  `datenaissance` date DEFAULT NULL,
+  `image` varchar(64) DEFAULT NULL,
+  `role` varchar(16) NOT NULL DEFAULT 'utilisateur',
+  `telephone` int(16) DEFAULT NULL,
+  `cin` int(8) DEFAULT NULL,
+  `nom` varchar(32) DEFAULT NULL,
+  `prenom` varchar(32) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
-(1, 'islem', 'islembargui43@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b'),
-(2, 'fourat', 'fourat@gmail.com', '43814346e21444aaf4f70841bf7ed5ae93f55a9d'),
-(3, 'aaa', 'aaa@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730'),
-(4, 'foulenbenfoulen', 'foulen@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730'),
-(5, 'fff', 'fff@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730'),
-(6, 'islem', 'islem@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `datenaissance`, `image`, `role`, `telephone`, `cin`, `nom`, `prenom`) VALUES
+(1, 'islem', 'islembargui43@gmail.com', '7c4a8d09ca3762af61e59520943dc26494f8941b', NULL, 'user-1.png', 'utilisateur', 99000111, NULL, NULL, NULL),
+(2, 'fourat', 'fourat@gmail.com', '43814346e21444aaf4f70841bf7ed5ae93f55a9d', NULL, 'user-2.png', 'utilisateur', NULL, NULL, NULL, NULL),
+(5, 'fff', 'fff@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730', NULL, NULL, 'utilisateur', NULL, NULL, NULL, NULL),
+(6, 'islem', 'islem@gmail.com', '8aefb06c426e07a0a671a1e2488b4858d694a730', NULL, NULL, 'utilisateur', NULL, NULL, NULL, NULL),
+(7, 'fbs', 'fbs@fbs.com', 'f2c645ea8f4b67b87075524c47b1a122f044565a', NULL, 'user-3.png', 'utilisateur', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -226,6 +289,12 @@ ALTER TABLE `admins`
 -- Indexes for table `annonce`
 --
 ALTER TABLE `annonce`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `avis`
+--
+ALTER TABLE `avis`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -281,6 +350,12 @@ ALTER TABLE `annonce`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `avis`
+--
+ALTER TABLE `avis`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
@@ -308,7 +383,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
