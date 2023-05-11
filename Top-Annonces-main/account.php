@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +29,10 @@ if(isset($_POST['submit'])){
 
    $name = $_POST['name'];
    $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $nom = $_POST['nom'];
+   $nom = filter_var($nom, FILTER_SANITIZE_STRING);
+   $prenom = $_POST['prenom'];
+   $prenom = filter_var($prenom, FILTER_SANITIZE_STRING);
    $email = $_POST['email'];
    $email = filter_var($email, FILTER_SANITIZE_STRING);
    $pass = sha1($_POST['pass']);
@@ -47,7 +50,7 @@ if(isset($_POST['submit'])){
       if($pass != $cpass){
          $message[] = 'confirm password not matched!';
       }else{
-         $insert_user = $conn->prepare("INSERT INTO `users`(name, email, password) VALUES(?,?,?)");
+         $insert_user = $conn->prepare("INSERT INTO `users`(name,nom , prenom, email, password) VALUES(?,?,?,?,?)");
          $insert_user->execute([$name, $email, $cpass]);
          $message[] = 'registered successfully, login now please!';
          
@@ -96,7 +99,6 @@ if(isset($_POST['submit'])){
                 <div class="col-2">
                     <img src="images/image1.png" alt="" width="100%">
                 </div>
-                
                 <div class="col-2">
                     <div class="form-container">
                         <div class="form-btn">
@@ -104,29 +106,35 @@ if(isset($_POST['submit'])){
                             <span onclick="register()">Register</span>
                             <hr id="Indicator">
                         </div>
-                       
                         <form id="LoginForm" action="" method="post">
                             <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="submit" value="login now" class="btn" name="submit1">
                         </form>
                         <form id="RegisterForm" action="" method="post">
-                            <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box">
+                        <div class="row">
+                            <input type="text" name="name" required placeholder="username" maxlength="20"  class="box">
+
+                        </div>
+                          
+                        
+                            <input type="text" name="nom" required placeholder="nom" maxlength="20"  class="box">
+                            <input type="text" name="prenom" required placeholder="prenom" maxlength="20"  class="box">
+                        <div class="row">
                             <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="submit" value="register now" class="btn" name="submit">
-                        </form>
+                    </div>  
+                         </form>
                       
                     </div>
                 </div>
-                
-
-              
-              
             </div>
         </div>
     </div>
+
+
 
   
 	<!--		footer		-->
