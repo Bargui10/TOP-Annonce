@@ -52,6 +52,17 @@ p{
     flex-wrap: wrap;
     justify-content: space-around;
 }
+.row{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row; /* Ajout */
+}
+
+.password-row {
+    display: flex;
+    flex-direction: row; /* Ajout */
+}
 
 .col-2{
     flex-basis: 50%;
@@ -458,7 +469,7 @@ th:last-child{
 .form-container{
     background: #fff;
     width: 300px;
-    height: 400px;
+    height: 500px;
     position: relative;
     text-align: center;
     padding: 20px 0;

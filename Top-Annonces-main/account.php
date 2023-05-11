@@ -112,21 +112,18 @@ if(isset($_POST['submit'])){
                             <input type="submit" value="login now" class="btn" name="submit1">
                         </form>
                         <form id="RegisterForm" action="" method="post">
-                        <div class="row">
-                            <input type="text" name="name" required placeholder="username" maxlength="20"  class="box">
-
-                        </div>
-                          
-                        
-                            <input type="text" name="nom" required placeholder="nom" maxlength="20"  class="box">
-                            <input type="text" name="prenom" required placeholder="prenom" maxlength="20"  class="box">
-                        <div class="row">
-                            <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-                            <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-                            <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            <div class="row">
+                                <input type="text" name="name" required placeholder="username" maxlength="20"  class="box">
+                                <input type="text" name="nom" required placeholder="nom" maxlength="20"  class="box">
+                                <input type="text" name="prenom" required placeholder="prenom" maxlength="20"  class="box">
+                                <input type="email" name="email" required placeholder="E-mail" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            </div>
+                           
+                                <input type="password" name="pass" required placeholder="Mot de passe" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                                <input type="password" name="cpass" required placeholder="confirm mot de passe" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                           
                             <input type="submit" value="register now" class="btn" name="submit">
-                    </div>  
-                         </form>
+                            </form>
                       
                     </div>
                 </div>
