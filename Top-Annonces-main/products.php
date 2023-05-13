@@ -28,19 +28,40 @@
 		// Number of results to show on each page.
 		$num_results_on_page = 6;
 
-		// Check TRI Type 
-		  
-        if(!empty($_GET['tri_submit'])){  
+		if (!empty($_GET['categorie'])) {
+			# code...
+			$stmt = $conn->prepare('SELECT * FROM annonce where categorie = ? ORDER BY price ASC'); 
+			$stmt->bindParam(1, $_GET['categorie'], PDO::PARAM_STR);
+
+			$noBind = TRUE;
+
+		}
+        elseif(!empty($_GET['tri_submit'])){  
+			$noBind = FALSE;
 			if(!empty($_GET['tri_choix'])) {  
 				$selected = $_GET['tri_choix'];  
 				echo 'You have chosen: ' . $selected;  
-				$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY ? LIMIT ?,?'); 
-				$stmt->bindParam(1, $selected);
+				if ($selected == "price ASC") {
+					# code...
+					$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY price ASC LIMIT ?, ?'); 
+				}elseif ($selected == "price DESC") {
+					# code...
+					$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY price DESC LIMIT ?, ?'); 
+				}elseif ($selected == "popularite DESC") {
+					# code...
+					$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY popularite DESC LIMIT ?, ?'); 
+
+				}else {
+					# code...
+					$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY name LIMIT ?, ?'); 
+				}
+				//$stmt->bindParam(1, $selected);
 
 				$getted = "YES";
 				
 
 			} else {  
+				$noBind = FALSE;
 				echo 'Please select the value. Going default..'; 
 				$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY name LIMIT ?,?'); 
 				$getted = "NO";
@@ -59,15 +80,20 @@
 		if ($stmt) {
 		// Calculate the page to get the results we need from our table.
 		$calc_page = ($page - 1) * $num_results_on_page;
-		if ($getted=="YES") {
+		if ($noBind==FALSE) {
 			# code...
-			$stmt->bindParam(2, $calc_page, PDO::PARAM_INT);
-			$stmt->bindParam(3, $num_results_on_page,PDO::PARAM_INT);
-		}else {
-			# code...
-			$stmt->bindParam(1, $calc_page, PDO::PARAM_INT);
-			$stmt->bindParam(2, $num_results_on_page,PDO::PARAM_INT);
+			if ($getted=="YES") {
+				# code...
+				$stmt->bindParam(1, $calc_page, PDO::PARAM_INT);
+				$stmt->bindParam(2, $num_results_on_page,PDO::PARAM_INT);
+				echo("<br>binded params for getted (order by)");
+			}else {
+				# code...
+				$stmt->bindParam(1, $calc_page, PDO::PARAM_INT);
+				$stmt->bindParam(2, $num_results_on_page,PDO::PARAM_INT);
+			}
 		}
+		
 		
 
 		// Execute & Get the results...
@@ -162,16 +188,12 @@
 								?>
 								
 								<div class="col-4">
-									<img src="images/product-1.jpg" alt="">
-									<h4><a href="annonce-details.php?id=<?php echo $one[0]; ?>"><?php echo $one[1]; ?></a></h4>
-									<div class="rating">
-										<i class="fa fa-star" ></i>
-										<i class="fa fa-star" ></i>
-										<i class="fa fa-star" ></i>
-										<i class="fa fa-star-half-o" ></i>
-										<i class="fa fa-star-o" ></i>
-									</div>
-									<p><?php echo "$ " .number_format( $one[2], 2) ; //price?></p>
+									<img src="uploaded_img/<?php echo $one['image1']; ?>" alt="">
+									
+									<h4><a href="annonce-details.php?id=<?php echo $one['id']; ?>"><?php echo $one['name']; ?></a></h4>
+
+									
+									<p><?php echo "$ " .number_format( $one['price'], 2) ; //price?></p>
 								</div>
 
 							<?php

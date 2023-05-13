@@ -17,88 +17,178 @@
     <?php
 		require("./bases/navbar.php");
 		require("connect.php");
-		
+
+        if (isset($_SESSION['user_id'])) {
+            # code...
+            $stmtUser = $conn->prepare('SELECT * FROM users where id = ?'); 
+            $stmtUser->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
+    
+            $stmtUser->execute(); 
+            $user = $stmtUser->fetch();
+
+
+            if ($user['role'] == "vendeur") {
+                # code...
+                $stmtAnnonces = $conn->prepare('SELECT * FROM annonce where idvendeur = ? ORDER BY price ASC'); 
+                $stmtAnnonces->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
+
+                $stmtAnnonces->execute(); 
+                $rows = $stmtAnnonces->rowCount();
+                $annonces = $stmtAnnonces->fetchAll();
+
+                // devenir vip
+                if (isset($_GET['vip']) and  $_GET['vip'] == "yes") {
+                    # code...
+                    $stmtUpdate = $conn->prepare('UPDATE user set vip = 1 where id = ?'); 
+                    $stmtUpdate->bindParam(1, $_SESSION['user_id'], PDO::PARAM_INT);
+            
+                    $stmtUpdate->execute(); 
+
+                }
+
+
+                        // delete annonce
+                if (isset($_GET['deleteAnnonce'])) {
+                    # code...
+                    $delete_annonce_id = $_GET['deleteAnnonce'];
+                    $delete_annonce_image = $conn->prepare("SELECT * FROM `annonce` WHERE id = ?");
+                    $delete_annonce_image->execute([$delete_annonce_id]);
+                    $fetch_delete_image = $delete_annonce_image->fetch(PDO::FETCH_ASSOC);
+
+                    if ($fetch_delete_image['image1']) {
+                        # code...
+                        unlink('./uploaded_img/'.$fetch_delete_image['image1']);
+                    }
+                    if ($fetch_delete_image['image2']) {
+                        # code...
+                        unlink('./uploaded_img/'.$fetch_delete_image['image2']);
+                    }
+                    if ($fetch_delete_image['image3']) {
+                        # code...
+                        unlink('./uploaded_img/'.$fetch_delete_image['image3']);
+                    }
+                    if ($fetch_delete_image['image4']) {
+                        # code...
+                        unlink('./uploaded_img/'.$fetch_delete_image['image4']);
+                    }
+                    if ($fetch_delete_image['image5']) {
+                        # code...
+                        unlink('./uploaded_img/'.$fetch_delete_image['image5']);
+                    }
+
+                    $delete_annonce = $conn->prepare("DELETE FROM `annonce` WHERE id = ?");
+                    $delete_annonce->execute([$delete_annonce_id]);
+
+                    header('location:myads.php');
+
+        }
+
+
+        
+
+            }
+            
+
+        }else {
+            # code...
+            echo("Vous n'etes pas connecté.. Redirection dans 5 secondes..");
+            sleep(5);
+            header("location:account.php");
+
+        }
+        
 	?>
 
 
     <!--        Cart Items Details      -->
     <div class="small-container cart-page">
 
+    <?php
+        echo('
         <p>Bonjour</p>
-        <h1>Ken Adams</h1>
-        <h4>Email: ken@adams.com</h4>
-        <h4>Ville: Tunis</h4>
+        <h1>'.$user["name"].'</h1>
+        <h4>Email: '.$user["email"].'</h4>
+        <h4>Date Naissance: '.$user["datenaissance"].'</h4>
+        <h4>Role: '.$user["role"].'</h4>
         <br>
-        <small>Date d'inscription: 11/12/2022</small>
+        ');
+    ?>
+        
         <hr><br>
 
 
         <?php
-            echo("Session email: ".$_SESSION['email']."<br> Session user_id: " .$_SESSION['user_id']);
-            require("addRating.php");
+            echo("Session user_id: " .$_SESSION['user_id']); 
         ?>
 
-        <h2>Mes Annonces</h2>
-        <br>
-        <a href="publish.html" class="btn">Ajouter Une Annonce</a>
+        <?php
+            if ($user['role'] == "vendeur") {
+                echo('
+                    <h2>Mes Annonces</h2>
+                    <br>
+                    <a href="publish.php" class="btn">Ajouter Une Annonce</a>
+                    <a href="myads.php?vip=yes" class="btn">Devenir VIP pour augmenter la visibilité</a>
 
-        <table>
-            <tr>
-                <th>Annonce</th>
-                <th>Prix</th>
-                <th>Ville</th>
+                    
+                    <table>
+                        <tr>
+                            <th>Annonce</th>
+                            <th>Prix</th>
+                            <th>Ville</th>
+                            <th>Actions</th>
 
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-1.jpg" alt="">
-                        <div>
-                            <p>Red Printed T-shirt</p>
-                            <small>Prix: $50.00</small>
-                            <br>
-                            <a href="">Supprimer</a>
-                        </div>
-                    </div>
-                </td>
-                <td>$<input type="number" value="50.00"></td>
-                <td><input type="text" value="Tunis"></td>
+                        </tr>
+                ');
 
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-2.jpg" alt="">
-                        <div>
-                            <p>Red Printed T-shirt</p>
-                            <small>Prix: $60.00</small>
-                            <br>
-                            <a href="">Supprimer</a>
-                        </div>
-                    </div>
-                </td>
-                <td>$<input type="number" value="60.00"></td>
-                <td><input type="text" value="Tunis"></td>
+                foreach ($annonces as $annonce) {
+                    # code...
+                
+                    echo('
+                    
+                
+                        <tr>
+                            <td>
+                                <div class="cart-info">
+                                    <img src="images/'.$annonce['image1'].'" alt="">
+                                    <div>
+                                        <p>'.$annonce['name'].'</p>
+                                        <small>Prix: $'.number_format( $annonce['price'], 2).'</small>
+                                        <br>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>$<input type="number" value="'.$annonce['price'].'"></td>
+                            <td><input type="text" value="'.$annonce['ville'].'"></td>
+                            <td><a href="myads.php?deleteAnnonce='.$annonce["id"].'"> <b>Supprimer</b> </a> </td>
 
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-3.jpg" alt="">
-                        <div>
-                            <p>Red Printed T-shirt</p>
-                            <small>Prix: $85.00</small>
-                            <br>
-                            <a href="">Supprimer</a>
-                        </div>
-                    </div>
-                </td>
-                <td>$<input type="number" value="85.00"></td>
-                <td><input type="text" value="Ben Arous"></td>
+                        </tr>');
+                    }  //end table annonce
+                    
+                    echo('
+                        </table>
 
-            </tr>
-        </table>
+                        <br> 
+                    ');
 
+            
+            } // end role = vendeur
+            else {
+                # code...
+                echo("Conected as normal user: " .$_SESSION['user_id']); 
+                echo'<a href="updateaccount.php?becomeVendeur=yes" class="btn">Devenir Vendeur</a>';
+                echo'<a href="updateaccount.php?becomeVendeur=no?role=utilisateur" class="btn">Modifier mes infos</a>';
+
+
+            }
+        ?>
+
+
+            
+
+        <?php
+            require("addRating.php");
+        ?>
+        
 
     </div>
 

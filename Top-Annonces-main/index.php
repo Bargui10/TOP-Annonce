@@ -17,6 +17,143 @@
 	<?php
 		require("./bases/navbar.php");
 		require("connect.php");
+
+
+
+		//SELECT * from annonce a, users u WHERE u.id = a.idvendeur AND u.vip = 1 ORDER BY a.popularite DESC LIMIT 0,4; 
+
+		$stmtBestAnnonces = $conn->prepare('SELECT a.id, a.price,a.name, a.datepublication, a.image1 from annonce a, users u WHERE u.id = a.idvendeur AND u.vip = 1 ORDER BY a.popularite DESC LIMIT 0,4');
+		$stmtBestAnnonces->execute(); 
+		$bestAnnonces = $stmtBestAnnonces->fetchAll();
+		//echo "ID Annonce: " .$bestAnnonces['id']. " Nom Annonce " . $bestAnnonces['name'];
+
+		$stmtNewAnnonces = $conn->prepare('SELECT * from annonce  ORDER BY datepublication DESC, popularite DESC LIMIT 0,8');
+		$stmtNewAnnonces->execute(); 
+		$newAnnonces = $stmtNewAnnonces->fetchAll();
+		//echo "ID Annonce: " .$bestAnnonces['id']. " Nom Annonce " . $bestAnnonces['name'];
+
+		// categories and their images
+		$stmtCategories = $conn->prepare('SELECT DISTINCT categorie, image1 from annonce where categorie <> "" GROUP BY categorie LIMIT 0,3; ');
+		$stmtCategories->execute();
+		$listeCategories = $stmtCategories->fetchAll();
+
+
+
+		//
+		
+		// Check TRI Type 
+		
+		if (isset($_POST['filter_submit'])) {
+			# code...
+			echo"<br>button set";
+
+			if (!empty($_POST['filter_name']) and !empty($_POST['filter_min'])  and !empty($_POST['filter_max']) and !empty($_POST['filter_ville'])  and  !empty($_POST['filter_categorie']) ) {
+				echo"<br>first";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where name LIKE ? AND price BETWEEN ? AND ? AND ville = ? AND categorie = ? ORDER BY name ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_name'], PDO::PARAM_STR);
+				$stmt->bindParam(2, $_POST['filter_min'], PDO::PARAM_INT);
+				$stmt->bindParam(3, $_POST['filter_max'], PDO::PARAM_INT);
+				$stmt->bindParam(4, $_POST['filter_ville'], PDO::PARAM_STR);
+				$stmt->bindParam(5, $_POST['filter_categorie'], PDO::PARAM_STR);
+
+			} // name, prix mi, prix max, ville, délégation, catégorie, sous-catégorie
+			elseif (!empty($_POST['filter_name']) and !empty($_POST['filter_min'])  and !empty($_POST['filter_max']) and !empty($_POST['filter_ville']) ) {
+				echo"<br>second";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where name LIKE ? AND price BETWEEN ? AND ? AND ville = ? ORDER BY name ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_name'], PDO::PARAM_STR);
+				$stmt->bindParam(2, $_POST['filter_min'], PDO::PARAM_INT);
+				$stmt->bindParam(3, $_POST['filter_max'], PDO::PARAM_INT);
+				$stmt->bindParam(4, $_POST['filter_ville'], PDO::PARAM_STR);
+
+			}
+			elseif (!empty($_POST['filter_name']) and !empty($_POST['filter_min'])  and !empty($_POST['filter_max'])  ) {
+				echo"<br>third";
+				
+				$stmt = $conn->prepare('SELECT * FROM annonce where name LIKE ? AND price BETWEEN ? AND ? ORDER BY name ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_name'], PDO::PARAM_STR);
+				$stmt->bindParam(2, $_POST['filter_min'], PDO::PARAM_INT);
+				$stmt->bindParam(3, $_POST['filter_max'], PDO::PARAM_INT);
+
+			}
+			elseif (!empty($_POST['filter_name']) and !empty($_POST['filter_min'])  ) {
+				echo"<br>fourth";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where name LIKE ? AND price >= ? ORDER BY name ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_name'], PDO::PARAM_STR);
+				$stmt->bindParam(2, $_POST['filter_min'], PDO::PARAM_INT);
+
+			}
+			
+			elseif (!empty($_POST['filter_name']) and !empty($_POST['filter_max'])  ) {
+				echo"<br>fifth";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where name LIKE ? AND price <= ? ORDER BY name ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_name'], PDO::PARAM_STR);
+				$stmt->bindParam(2, $_POST['filter_max'], PDO::PARAM_INT);
+
+			}
+			elseif (!empty($_POST['filter_name']) ) {
+				echo"<br>sixth";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where name LIKE ? ORDER BY popularite ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_name'], PDO::PARAM_STR);
+
+			}
+			elseif (!empty($_POST['filter_categorie']) ) {
+				echo"<br>seventh";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where categorie LIKE ? ORDER BY name ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_categorie'], PDO::PARAM_STR);
+
+			}
+			elseif (!empty($_POST['filter_ville']) ) {
+				echo"<br>ninth";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where ville LIKE ? ORDER BY name ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_ville'], PDO::PARAM_STR);
+
+			}
+			elseif (!empty($_POST['filter_min']) ) {
+				echo"<br>tenth";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where price >= ? ORDER BY price ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_min'], PDO::PARAM_INT);
+
+			}
+			elseif (!empty($_POST['filter_max']) ) {
+				echo"<br>eleventh";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce where price <= ? ORDER BY price ASC'); 
+
+				$stmt->bindParam(1, $_POST['filter_max'], PDO::PARAM_INT);
+
+			}else {
+				# code...
+				echo"<br>twelvth";
+
+				$stmt = $conn->prepare('SELECT * FROM annonce ORDER BY popularite ASC'); 
+
+			}
+
+			$stmt->execute();
+			$filtered_annonces = $stmt->fetchAll();
+		
+
+		}
+
+		
+
 	?>
 
 
@@ -52,90 +189,132 @@
                         </div>
 
                         
-                        <form id="RegisterForm" action="">
+                        <form id="RegisterForm" action="" method="post">
 							<div class="row">
-									<input type="text" placeholder="Rechercher sur Top Annonces" >
-								
+								<input type="text" name="filter_name" placeholder="Rechercher sur Top Annonces" >
 							</div>
 							<div class="row">
-									<input type="number" placeholder="Prix Minimum">
-
-									<input type="number" placeholder="Prix Maximum">
-
+								<input type="number" name="filter_min" placeholder="Prix Minimum">
+								<input type="number" name="filter_max" placeholder="Prix Maximum">
 							</div>
 							
-							<select name="" id="">
+							<select name="filter_ville" id="">
 								<option value="">Ville</option>
-								<option value="">Ariana</option>
-								<option value="">Ben Arous</option>
-								<option value="">Bizerte</option>
-								<option value="">Béja</option>
-								<option value="">Gabes</option>
-								<option value="">Gafsa</option>
-								<option value="">Jendouba</option>
-								<option value="">Kairouan</option>
-								<option value="">Kasserine</option>
-								<option value="">Kébili</option>
-								<option value="">La Manouba</option>
-								<option value="">Le Kef</option>
-								<option value="">Mahdia</option>
-								<option value="">Monastir</option>
-								<option value="">Médenine</option>
-								<option value="">Nabeul</option>
-								<option value="">Sfax</option>
-								<option value="">Sidi Bou Zid</option>
-								<option value="">Siliana</option>
-								<option value="">Sousse</option>
-								<option value="">Tataouine</option>
-								<option value="">Tozeur</option>
-								<option value="">Tunis</option>
-								<option value="">Zaghouan</option>
+								<option value="Ariana">Ariana</option>
+								<option value="Ben Arous">Ben Arous</option>
+								<option value="Bizerte">Bizerte</option>
+								<option value="Béja">Béja</option>
+								<option value="Gabes">Gabes</option>
+								<option value="Gafsa">Gafsa</option>
+								<option value="Jendouba">Jendouba</option>
+								<option value="Kairouan">Kairouan</option>
+								<option value="Kasserine">Kasserine</option>
+								<option value="Kébili">Kébili</option>
+								<option value="La Manouba">La Manouba</option>
+								<option value="Le Kef">Le Kef</option>
+								<option value="Mahdia">Mahdia</option>
+								<option value="Monastir">Monastir</option>
+								<option value="Médenine">Médenine</option>
+								<option value="Nabeul">Nabeul</option>
+								<option value="Sfax">Sfax</option>
+								<option value="Sidi Bou Zid">Sidi Bou Zid</option>
+								<option value="Siliana">Siliana</option>
+								<option value="Sousse">Sousse</option>
+								<option value="Tataouine">Tataouine</option>
+								<option value="Tozeur">Tozeur</option>
+								<option value="Tunis">Tunis</option>
+								<option value="Zaghouan">Zaghouan</option>
 							</select>
-							<select name="" id="">
-								<option value="">Délégation</option>
-								<option value="">Autres Villes</option>
-							</select>
-							<select name="" id="">
+						
+							<select name="filter_categorie" id="">
 								<option value="">Catégorie</option>
-								<option value="">Véhicules</option>
-								<option value="">MAison et Jardin</option>
-								<option value="">Emploi et Services</option>
-								<option value="">Immobilier</option>
-								<option value="">Habillement et Bien Etre</option>
-								<option value="">Informatique et Multimédia</option>
-								<option value="">Loisirs et Divertissement</option>
-								<option value="">Autres</option>
+								<option value="vehicules">Véhicules</option>
+								<option value="maison">MAison et Jardin</option>
+								<option value="emploi">Emploi et Services</option>
+								<option value="immobilier">Immobilier</option>
+								<option value="habillement">Habillement et Bien Etre</option>
+								<option value="informatique">Informatique et Multimédia</option>
+								<option value="loisirs">Loisirs et Divertissement</option>
+								<option value="autres">Autres</option>
 							</select>
-							<select name="" id="">
-								<option value="">Sous-catégorie</option>
-								<option value="">Autres</option>
-							</select>
+							
 
-							<button type="submit" class="btn">Filtrer</button>
+							<button name="filter_submit" type="submit" class="btn">Filtrer</button>
                         </form>
 
                     </div>
             </div>
         </div>
+		
+	<!--	FILTER RESULTS	 -->
+	
+
+		<?php
+			// s'il ya des annonces qui correspondent aux résultats de recherches de l'utilisateur:
+			if (isset($stmt)) {
+				# code...
+			
+			if ($stmt->rowCount() > 0) {
+				# code...
+				
+				?>
+				<div class="small-container">
+					<h2 class="title">Résultats de recherche</h2>
+					
+					<div class="row">
+					<?php
+						foreach ($filtered_annonces as $filtered_annonce ) {
+							# code...
+							echo('
+								<div class="col-4">
+									<a href="annonce-details.php?id='.$filtered_annonce['id'].'"><img src="uploaded_img/'.$filtered_annonce['image1'].'" alt=""></a>
+									<a href="annonce-details.php?id='.$filtered_annonce['id'].'"><h4>'.$filtered_annonce['name'].'</h4></a>
+									
+									<p>$ '.number_format( $filtered_annonce['price'], 2).'</p>
+									<p>Publiée le '. date( "m/d/Y", strtotime($filtered_annonce['datepublication'])) .'</p>
+								</div>
+
+							');
+
+						}
+					
+					?>
+							
+							
+					</div>
+				</div>
+
+		<?php
+			}	
+		}	
+		
+		?>
+
+		
+				
+				
+			
+
 
 	<!------- featured categories ---------->
 	<div class="categories">
 		<div class="small-container">
 			<h2 class="title">Top Catégories</h2>
 			<div class="row">
-				<div class="col-3">
-					<img src="images/category-1.jpg" alt="">
-					<h3>Habillement</h3>
-				</div>
-				<div class="col-3">
-					<img src="images/category-2.jpg" alt="">
-					<h3>Divertissement</h3>
-				</div>
-				<div class="col-3">
-					<img src="images/category-3.jpg" alt="">
-					<h3>Informatique & Multimédia</h3>
-				</div>
-	
+
+			<?php
+				foreach ($listeCategories as $itemCategorie ) {
+					# code...
+					echo('
+						<div class="col-3">
+							<a href="products.php?categorie='.$itemCategorie["categorie"].'"><img src="uploaded_img/'.$itemCategorie["image1"].'" alt=""></a>
+							<h3>'.$itemCategorie["categorie"].'</h3>
+						</div>
+					');
+				}
+			
+			?>
+
 			</div>
 		</div>
 		
@@ -148,55 +327,31 @@
 		<h2 class="title">Annonces à la une</h2>
 		
 		<div class="row">
+			<?php
+				foreach ($bestAnnonces as $bestAnnonce ) {
+					# code...
+					echo('
+						<div class="col-4">
+							<a href="annonce-details.php?id='.$bestAnnonce['id'].'"><img src="uploaded_img/'.$bestAnnonce['image1'].'" alt=""></a>
+							<a href="annonce-details.php?id='.$bestAnnonce['id'].'"><h4>'.$bestAnnonce['name'].'</h4></a>
+							<div class="rating">
+								<i class="fa fa-star" ></i>
+								<i class="fa fa-star" ></i>
+								<i class="fa fa-star" ></i>
+								<i class="fa fa-star" ></i>
+								<i class="fa fa-star" ></i>
+							</div>
+							<p>$ '.number_format( $bestAnnonce['price'], 2).'</p>
+							<p>Publiée le '. date( "m/d/Y", strtotime($bestAnnonce['datepublication'])) .'</p>
+						</div>
+
+					');
+
+				}
 			
-			<div class="col-4">
-				<a href="product-details.html"><img src="images/product-1.jpg" alt=""></a>
-				<a href="product-details.html"><h4>Red Printed T-shirt</h4></a>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			<div class="col-4">
-				<img src="images/House-1.png" alt="">
-				<h4>Maison Moderne</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$300,000.00</p>
-			</div>
-			<div class="col-4">
-				<img src="images/product-2.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			<div class="col-4">
-				<img src="images/product-3.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
+			?>
+			
+			
 			
 		</div>
 
@@ -206,110 +361,29 @@
 		
 		<div class="row">
 			
-			<div class="col-4">
-				<img src="images/car-2.png" alt="">
-				<h4>Mitsubishi Outlander À Vendre</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$175,000.00</p>
-			</div>
-			<div class="col-4">
-				<img src="images/House-2.png" alt="">
-				<h4>Maison coquette moderne</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$210,000.00</p>
-			</div>
-			<div class="col-4">
-				<img src="images/car-1.png" alt="">
-				<h4>À Vendre Voiture Nissan Bleue</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-				</div>
-				<p>$80,000.00</p>
-			</div>
-			<div class="col-4">
-				<img src="images/car-3.png" alt="">
-				<h4>Voiture BMW Blanche</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-o" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$190,000.00</p>
-			</div>
+			<?php
+				foreach ($newAnnonces as $newAnnonce ) {
+					# code...
+					echo('
+						<div class="col-4">
+							<a href="annonce-details.php?id='.$newAnnonce['id'].'"><img src="uploaded_img/'.$newAnnonce['image1'].'" alt=""></a>
+							<a href="annonce-details.php?id='.$newAnnonce['id'].'"><h4>'.$newAnnonce['name'].'</h4></a>
+							
+							<p>$ '.number_format( $newAnnonce['price'], 2).'</p>
+							<p>Publiée le '. date( "m/d/Y", strtotime($newAnnonce['datepublication'])) .'</p>
+
+						</div>
+
+					');
+
+				}
+			?>
+			
 			
 		</div>
 
 
-		<div class="row">
-			<div class="col-4">
-				<img src="images/product-9.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			<div class="col-4">
-				<img src="images/product-10.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			<div class="col-4">
-				<img src="images/product-11.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-half-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			<div class="col-4">
-				<img src="images/product-12.jpg" alt="">
-				<h4>Red Printed T-shirt</h4>
-				<div class="rating">
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star" ></i>
-					<i class="fa fa-star-o" ></i>
-					<i class="fa fa-star-o" ></i>
-				</div>
-				<p>$50.000</p>
-			</div>
-			
-		</div>
-
+	
 	</div>
 
 	<!--		OFFERS		-->
@@ -340,28 +414,29 @@
 			<div class="row">
 				<!--INDIV TESTIMONIAL-->
 				<?php
-					$stmt = $conn->prepare('SELECT * FROM avis ORDER BY rating DESC LIMIT 0,3'); 
-					if ($stmt) {
+					$stmtAvis = $conn->prepare('SELECT * FROM avis ORDER BY rating DESC LIMIT 0,3'); 
+					if ($stmtAvis) {
 						# code...
-						$stmt->execute(); 
-						$rows = $stmt->rowCount();
-						$data = $stmt->fetchAll();
+						$stmtAvis->execute(); 
+						$rows = $stmtAvis->rowCount();
+						$data = $stmtAvis->fetchAll();
 
 						foreach ($data as $col) {
 							# code...
 							$stmtImage = $conn->prepare('SELECT name,image FROM users WHERE id = ?'); 
-							$stmtImage->bindParam(1, $col[2], PDO::PARAM_INT);
+							$stmtImage->bindParam(1, $col['user'], PDO::PARAM_INT);
 							$stmtImage->execute();
 							$dataUser = $stmtImage->fetch();
+
 							echo('
 							<div class="col-3">
 								<i class="fa fa-quote-left" ></i>
 
-								<p>'.$col[1].'</p>	<!-- avis.description -->
+								<p>'.$col['description'].'</p>	<!-- avis.description -->
 								<div class="rating">
 								
 							');//<!--echo end-->
-								$avis = $col[3];
+								$avis = $col['rating'];
 								for ($i=1; $i <= $avis ; $i++) { 
 									# code...
 									echo('<i class="fa fa-star" ></i>');
@@ -380,8 +455,8 @@
 								//<!--echo start-->
 								echo('
 								</div>
-								<img src="images/'.$dataUser[2].'" alt="">
-								<h3>'.$dataUser[1].'</h3> <!-- user.name -->
+								<img src="uploaded_img/'.$dataUser['image'].'" alt=""> <!-- user.image -->
+								<h3>'.$dataUser['name'].'</h3> <!-- user.name -->
 							</div>
 							');
 
@@ -392,30 +467,6 @@
 		</div>
 	</div>
 
-
-<!--		TESTIMONIALS		-->
-	<div class="testimonial">
-		<div class="small-container">
-			<div class="row">
-				<!--INDIV TESTIMONIAL-->
-				<div class="col-3">
-					<i class="fa fa-quote-left" ></i>
-
-					<p>Top Annonces est un site magnifique qui a une interface utilisateur ergonomique.</p>	
-					<div class="rating">
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star" ></i>
-						<i class="fa fa-star-half-o" ></i>
-						<i class="fa fa-star-o" ></i>
-					</div>
-					<img src="images/user-1.png" alt="">
-					<h3>Alice Parker</h3>
-				</div>
-				
-			</div>
-		</div>
-	</div>
 
 	<!--		BRANDS		-->
 

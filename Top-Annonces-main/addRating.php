@@ -2,6 +2,7 @@
     // this one will be added to user profile and vendeur profile with require(). 
     // those pages have require("navbar.php") and require("connect.php") already.
 
+    
     if (isset($_POST['submitAvis'])) {
         # code...
 
@@ -29,7 +30,7 @@
         }else {
             echo "<h3>Vous devez etre connecté pour donner votre avis. Redirection dans 5 secondes...</h3>";
             sleep(5);
-            header("location:login.php");
+            header("location:account.php");
         }
 
 

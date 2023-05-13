@@ -127,20 +127,20 @@
     <div class="small-container single-product">
         <div class="row">
             <div class="col-2">
-                <img src="images/<?php echo $dataCurrent['image1']; ?>" alt="" width="100%" id="productImg">
+                <img src="uploaded_img/<?php echo $dataCurrent['image1']; ?>" alt="" width="100%" id="productImg">
 
                 <div class="small-img-row">
                     <div class="small-img-col">
-                        <img src="images/<?php echo $dataCurrent['image2']; ?>" alt="" width="100%" class="small-img">
+                        <img src="uploaded_img/<?php echo $dataCurrent['image2']; ?>" alt="" width="100%" class="small-img">
                     </div>
                     <div class="small-img-col">
-                        <img src="images/<?php echo $dataCurrent['image3']; ?>" alt="" width="100%" class="small-img">
+                        <img src="uploaded_img/<?php echo $dataCurrent['image3']; ?>" alt="" width="100%" class="small-img">
                     </div>
                     <div class="small-img-col">
-                        <img src="images/<?php echo $dataCurrent['image4']; ?>" alt="" width="100%" class="small-img">
+                        <img src="uploaded_img/<?php echo $dataCurrent['image4']; ?>" alt="" width="100%" class="small-img">
                     </div>
                     <div class="small-img-col">
-                        <img src="images/<?php echo $dataCurrent['image5']; ?>" alt="" width="100%" class="small-img">
+                        <img src="uploaded_img/<?php echo $dataCurrent['image5']; ?>" alt="" width="100%" class="small-img">
                     </div>
                 </div>
 
@@ -149,8 +149,11 @@
 
             </div>
             <div class="col-2">
-                <p>Home / T-Shirt</p>
-                <h1><?php echo $dataCurrent['name']; ?></h1>
+				<?php
+				echo('<a href="products.php?categorie='.$dataCurrent['categorie'].'"><p>Home / '.$dataCurrent['categorie'].'</p></a>');
+				?>
+                
+				<h1><?php echo $dataCurrent['name']; ?></h1>
                 <h4>$<?php echo number_format( $dataCurrent['price'], 2); ?></h4>
 				<p>Emplacement: <?php echo $dataCurrent['ville']." - ".$dataCurrent['delegation'] ; ?></p>
 				<br>
@@ -204,7 +207,7 @@
 					# code...
 					echo('
 					<div class="col-4">
-						<img src="images/product-4.jpg" alt="">
+						<img src="uploaded_img/'.$dataAnnonce['image1'].'" alt="">
 						<h4><a href="annonce-details.php?id='.$dataAnnonce["id"].'">'.$dataAnnonce["name"].'</a></h4>
 						
 						<p>$'.number_format( $dataAnnonce['price'], 2).'</p>
@@ -219,7 +222,7 @@
 					# code...
 					echo('
 					<div class="col-4">
-						<img src="images/product-4.jpg" alt="">
+						<img src="uploaded_img/'.$dataOtherAnnonce['image1'].'" alt="">
 						<h4><a href="annonce-details.php?id='.$dataOtherAnnonce["id"].'">'.$dataOtherAnnonce["name"].'</a></h4>
 						
 						<p>$'.number_format( $dataOtherAnnonce['price'], 2).'</p>

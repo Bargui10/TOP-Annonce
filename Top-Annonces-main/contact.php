@@ -1,44 +1,3 @@
-<?php
-
-include 'connect.php';
-session_start();
-
-if(isset($_SESSION['user_id'])){
-   $user_id = $_SESSION['user_id'];
-}else{
-   $user_id = '';
-};
-
-if(isset($_POST['send'])){
-
-   $name = $_POST['name'];
-   $name = filter_var($name, FILTER_SANITIZE_STRING);
-   $email = $_POST['email'];
-   $email = filter_var($email, FILTER_SANITIZE_STRING);
-   $number = $_POST['number'];
-   $number = filter_var($number, FILTER_SANITIZE_STRING);
-   $msg = $_POST['msg'];
-   $msg = filter_var($msg, FILTER_SANITIZE_STRING);
-
-   $select_message = $conn->prepare("SELECT * FROM `messages` WHERE name = ? AND email = ? AND number = ? AND message = ?");
-   $select_message->execute([$name, $email, $number, $msg]);
-
-   if($select_message->rowCount() > 0){
-      $message[] = 'already sent message!';
-   }else{
-
-      $insert_message = $conn->prepare("INSERT INTO `messages`(user_id, name, email, number, message) VALUES(?,?,?,?,?)");
-      $insert_message->execute([$user_id, $name, $email, $number, $msg]);
-
-      $message[] = 'sent message successfully!';
-
-   }
-
-}
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,33 +14,79 @@ if(isset($_POST['send'])){
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
    <!-- custom css file link  -->
-   <link rel="stylesheet" href="css/style1.css">
 
 </head>
-<body>
-    
-    <?php
-		require("./bases/navbar.php");
-		
-	?>
+<body>  
+   <?php include "./bases/navbar.php"; ?>
+   <?php
+
+   include 'connect.php';
 
 
-<section class="contact">
+if(isset($_POST['send'])){
 
-    <form action="" method="post">
-        <h3>Contact US</h3>
-        <input type="text" name="name" placeholder="enter your name" required maxlength="20" class="box">
-        <input type="email" name="email" placeholder="enter your email" required maxlength="50" class="box">
-        <input type="number" name="number" min="0" max="9999999999" placeholder="enter your number" required onkeypress="if(this.value.length == 10) return false;" class="box">
-        <textarea name="msg" class="box" placeholder="enter your message" cols="30" rows="10"></textarea>
-        <input type="submit" value="send message" name="send" class="btn">
-    </form>
+   $name = $_POST['name'];
+   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $message = $_POST['message'];
+   $message = filter_var($message, FILTER_SANITIZE_STRING);
 
-</section>
+   $select_message = $conn->prepare("SELECT * FROM `messages` WHERE name = ? AND email = ? AND message = ?");
+   $select_message->execute([$name, $email, $message]);
 
-   <!--		footer		-->
-	<?php
-		require("./bases/footer.php")
-	?>
+   if($select_message->rowCount() > 0){
+      $message1[] = 'already sent message!';
+   }else{
+
+      $insert_message = $conn->prepare("INSERT INTO `messages`(user_id, name, email,  message) VALUES(?,?,?,?)");
+      $insert_message->execute([$user_id, $name, $email, $message]);
+
+      $message1[] = 'sent message successfully!';
+
+   }
+
+}
+?>
+
+
+
+    <div class="container">
+			<div class="row">
+            <div class="form-container">
+            <form action="" method="post">
+					<h3>Nous Contacter</h3>
+				
+					<label class="form-group">
+                  
+						<input type="text" class="form-control" name="name" placeholder="Nom" required>
+						
+						<span class="border"></span>
+					</label>
+					<label class="form-group">
+
+						<input type="text"  name="email"class="form-control" placeholder="Email"  required>
+						<span class="border"></span>
+					</label>
+					<label class="form-group" >
+
+						<input name="message" id="" class="form-control" placeholder="Message" required>
+						<span class="border"></span>
+					</label>
+               <div class="form-btn">
+					<button class="btn" type="submit" name="send">Envoyer </button>
+
+               </div>
+						
+
+ 			</form>
+            </div><br>
+				
+			</div><br>
+	</div>
+    <br>
+   <?php
+      require("./bases/footer.php");
+   ?>
 </body>
 </html>

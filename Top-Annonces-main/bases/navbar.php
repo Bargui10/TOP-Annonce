@@ -15,18 +15,46 @@
 	                if(isset($_SESSION['user_id'])){
 		                $user_id = $_SESSION['user_id'];
                         echo("<li><a href='myads.php'>Mon Compte<img src='images/storefront.png' alt='' width='35px' height='35px'></a></li>");
- 	                }elseif(isset($_SESSION['admin_id'])){
+						//logout
+						echo('
+							<li>
+								<form action="" method="post">
+									<button type="submit" name="logout">Logout</button>
+								</form>
+							</li>
+						');
+
+					}elseif(isset($_SESSION['admin_id'])){
 						$admin_id = $_SESSION['admin_id'];
                         echo("<li><a href='admin.php'>Page Admin</a></li>");
+						//logout
+						echo('
+							<li>
+								<form action="" method="post">
+									<button type="submit" name="logout">Logout</button>
+								</form>
+							</li>
+						');
+
 					}
 					else{
 		                $user_id = '';
                         echo("<li><a href='account.php'>Login</a></li>");
+
  	                };
+
+					if (isset($_POST['logout'])) {
+						# code...
+						session_destroy();
+						header("location:account.php");
+					}
                 ?>
 
 			</ul>
 		</nav>
 	</div>
+
+	
+	
 
 </div>

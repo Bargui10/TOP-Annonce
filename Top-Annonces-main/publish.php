@@ -1,73 +1,6 @@
-<?php
-include 'connect.php';
 
-//session_start();
 
-//$admin_id = $_SESSION['admin_id'];
 
-/*if(!isset($admin_id)){
-   header('location:login_admin.php');
-};*/
-
-if(isset($_POST['add_product'])){
-
-   $name = $_POST['name'];
-   $name = filter_var($name, FILTER_SANITIZE_STRING);
-
-   $price = $_POST['price'];
-   $price = filter_var($price, FILTER_SANITIZE_STRING);
-
-   $details = $_POST['details'];
-   $details = filter_var($details, FILTER_SANITIZE_STRING);
-
-   $ville = $_POST['ville'];
-   $ville = filter_var($ville, FILTER_SANITIZE_STRING);
-   
-   $delegation = $_POST['delegation'];
-   $delegation = filter_var($delegation, FILTER_SANITIZE_STRING);
-
-   $categorie = $_POST['categorie'];
-   $categorie = filter_var($categorie, FILTER_SANITIZE_STRING);
-
-   $sous_categorie = $_POST['sous_categorie'];
-   $sous_categorie = filter_var($sous_categorie, FILTER_SANITIZE_STRING);
-
-   if (isset($image)) {
-    # code...
-    $image = $_FILES['image']['name'];
-   $image = filter_var($image, FILTER_SANITIZE_STRING);
-   $image_size_01 = $_FILES['image']['size'];
-   $image_tmp_name_01 = $_FILES['image']['tmp_name'];
-   $image_folder_01 = '../uploaded_img/'.$image;
-   }
-   
-
-  
-
-   $select_annonce = $conn->prepare("SELECT * FROM `annonce` WHERE name = ?");
-   $select_annonce->execute([$name]);
-
-   if($select_annonce->rowCount() > 0){
-      $message[] = 'annonce name already exist!';
-   }else{
-
-      $insert_annonce = $conn->prepare("INSERT INTO `annonce`(name, price , details, ville , delegation , categorie, sous_categorie, image) VALUES(?,?,?,?,?,?,?,?)");
-      $insert_annonce->execute([$name, $price , $details , $ville , $delegation , $categorie , $sous_categorie , $image]);
-
-      if($insert_annonce){
-         if($image_size_01 > 2000000){
-            $message[] = 'image size is too large!';
-         }else{
-            move_uploaded_file($image_tmp_name_01, $image_folder_01);
-            $message[] = 'new annonce added!';
-         }
-
-      }
-
-   }  
-
-};
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,17 +15,160 @@ if(isset($_POST['add_product'])){
 	<title>Top Annonces - Produits</title>
 </head>
 <body>
-		
+
     <?php
-		require("./bases/navbar.php");
-		
-	?>
+        require("./bases/navbar.php");
+    ?>
+
+<?php
+    include 'connect.php';
+
+    if (!isset($_SESSION['admin_id']) and !isset($_SESSION['user_id'])  ) {
+        # code...
+        echo("you cant publish , redirecting in 5 seconds");
+        sleep(5);
+        header("location:account.php");
+    }
+
+    if(isset($_POST['add_product'])){
+
+    $name = $_POST['name'];
+    $name = filter_var($name, FILTER_SANITIZE_STRING);
+
+    $price = $_POST['price'];
+    $price = filter_var($price, FILTER_SANITIZE_STRING);
+
+    $details = $_POST['details'];
+    $details = filter_var($details, FILTER_SANITIZE_STRING);
+
+    $ville = $_POST['ville'];
+    $ville = filter_var($ville, FILTER_SANITIZE_STRING);
+    
+    $delegation = $_POST['delegation'];
+    $delegation = filter_var($delegation, FILTER_SANITIZE_STRING);
+
+    $categorie = $_POST['categorie'];
+    $categorie = filter_var($categorie, FILTER_SANITIZE_STRING);
+
+    $sous_categorie = $_POST['sous_categorie'];
+    $sous_categorie = filter_var($sous_categorie, FILTER_SANITIZE_STRING);
+
+
+    //* add image
+    /*
+    $image = $_FILES['image']['name'];
+    $image = filter_var($image, FILTER_SANITIZE_STRING);
+    $image_size_01 = $_FILES['image']['size'];
+    $image_tmp_name_01 = $_FILES['image']['tmp_name'];
+    $image_folder_01 = 'uploaded_img/'.$image;
+    */
+
+
+
+
+        if(isset($_FILES['files'])){
+            $errors= array();
+
+            $images_list = array();
+
+            foreach($_FILES['files']['tmp_name'] as $key => $tmp_name ){
+                $file_name = $key.$_FILES['files']['name'][$key];
+                $file_size =$_FILES['files']['size'][$key];
+                $file_tmp =$_FILES['files']['tmp_name'][$key];
+                
+                
+                if($file_size > 2097152){
+                    $errors[]='File size must be less than 2 MB';
+                }
+
+                $desired_dir="uploaded_img";
+                if(empty($errors)==true){
+                    if(is_dir($desired_dir)==false){
+                        mkdir("$desired_dir", 0700);// Create directory if it does not exist
+                    }
+                    if(is_dir("$desired_dir/".$file_name)==false){
+                        move_uploaded_file($file_tmp,"uploaded_img/".$file_name);
+                    }else{                                  //rename the file if another one exist
+                        $new_dir="uploaded_img/".$file_name.time();
+                        rename($file_tmp,$new_dir) ;               
+                    }
+                    
+                    array_push($images_list, $file_name);
+
+                }else{
+                        print_r($errors);
+                }
+            }
+            if(empty($errors)  and count($images_list) == 5 ){
+                echo "Images Success. Adding annonce";
+
+                try{     
+
+                    // check if annonce name exists                
+                    $select_annonce = $conn->prepare("SELECT * FROM `annonce` WHERE name = ?");
+                    $select_annonce->execute([$name]);
+
+                    if($select_annonce->rowCount() > 0){
+                        $message[] = 'annonce name already exist!';
+                    }else{
+                        // insert annonce
+                        $query = "INSERT into annonce(idvendeur, name, price, details, ville, delegation, categorie, sous_categorie, image1, image2, image3, image4, image5)
+                                VALUES(:idvendeur, :name, :price, :details, :ville, :delegation, :categorie, :sous_categorie, :image1, :image2, :image3, :image4, :image5)";
+
+                        $insert = $conn->prepare($query);
+                        $insert->execute(
+                            array(
+                            ':idvendeur' =>$_SESSION['user_id'],
+                            ':name'=>$name,
+                            ':price'=>$price,
+                            ':details'=>$details,
+                            ':ville'=>$ville,
+                            ':delegation'=>$delegation,
+                            ':categorie'=>$categorie,
+                            ':sous_categorie'=>$sous_categorie,
+                            ':image1'=>$images_list[0],
+                            ':image2'=>$images_list[1],
+                            ':image3'=>$images_list[2],
+                            ':image4'=>$images_list[3],
+                            ':image5'=>$images_list[4])
+                        );
+                    
+                    }
+
+
+                }catch(PDOException $e){
+                    echo $e->getMessage();
+                }
+            }
+            else {
+                # code...
+                // there are errors somewhere
+                echo "Des erreurs ont été rencontré";
+                print_r($errors);
+            }
+        }
+
+    };
+?>
 
 
     <!--        Annonces      -->
     <div class="container publish-page">
         <h2>Publiez Une Nouvelle Annonce</h2>
         <hr>
+                    <?php
+                        if(isset($message)){
+                        foreach($message as $message){
+                            echo '
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span>'.$message.'</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            ';
+                        }
+                        }
+            ?>
+
 
         <div class="row">
            
@@ -103,70 +179,72 @@ if(isset($_POST['add_product'])){
                     </div>
 
                     
-                    <form id="AjoutForm" method="post">
+                    <form id="" method="post" enctype="multipart/form-data">
                         <div class="row">
-                                <input type="text" placeholder="Titre" name ="name">
+                                <input type="text" placeholder="Titre" name ="name" required>
                             
                         </div>
                         <div class="row">
-                                <input type="number" placeholder="Prix" name="price">
+                                <input type="number" placeholder="Prix" name="price" required>
 
-                                <input type="text" placeholder="details" name="details">
+                                <input type="text" placeholder="details" name="details" required>
 
                         </div>
 
-                        <select name="ville" id="">
+                        <select name="ville" required id="">
                             <option value="">Ville</option>
-                            <option value="">Ariana</option>
-                            <option value="">Ben Arous</option>
-                            <option value="">Bizerte</option>
-                            <option value="">Béja</option>
-                            <option value="">Gabes</option>
-                            <option value="">Gafsa</option>
-                            <option value="">Jendouba</option>
-                            <option value="">Kairouan</option>
-                            <option value="">Kasserine</option>
-                            <option value="">Kébili</option>
-                            <option value="">La Manouba</option>
-                            <option value="">Le Kef</option>
-                            <option value="">Mahdia</option>
-                            <option value="">Monastir</option>
-                            <option value="">Médenine</option>
-                            <option value="">Nabeul</option>
-                            <option value="">Sfax</option>
-                            <option value="">Sidi Bou Zid</option>
-                            <option value="">Siliana</option>
-                            <option value="">Sousse</option>
-                            <option value="">Tataouine</option>
-                            <option value="">Tozeur</option>
-                            <option value="">Tunis</option>
-                            <option value="">Zaghouan</option>
+                            <option value="Ariana">Ariana</option>
+                            <option value="Ben Arous">Ben Arous</option>
+                            <option value="Bizerte">Bizerte</option>
+                            <option value="Béja">Béja</option>
+                            <option value="Gabes">Gabes</option>
+                            <option value="Gafsa">Gafsa</option>
+                            <option value="Jendouba">Jendouba</option>
+                            <option value="Kairouan">Kairouan</option>
+                            <option value="Kasserine">Kasserine</option>
+                            <option value="Kébili">Kébili</option>
+                            <option value="La Manouba">La Manouba</option>
+                            <option value="Le Kef">Le Kef</option>
+                            <option value="Mahdia">Mahdia</option>
+                            <option value="Monastir">Monastir</option>
+                            <option value="Médenine">Médenine</option>
+                            <option value="Nabeul">Nabeul</option>
+                            <option value="Sfax">Sfax</option>
+                            <option value="Sidi Bou Zid">Sidi Bou Zid</option>
+                            <option value="Siliana">Siliana</option>
+                            <option value="Sousse">Sousse</option>
+                            <option value="Tataouine">Tataouine</option>
+                            <option value="Tozeur">Tozeur</option>
+                            <option value="Tunis">Tunis</option>
+                            <option value="Zaghouan">Zaghouan</option>
                         </select>
-                        <select name="delegation" id="">
-                            <option value="">Délégation</option>
-                            <option value="">Autres Villes</option>
+
+                        <select name="delegation" required id="">
+                            <option value="delegation">Délégation</option>
+                            <option value="autre">Autres Villes</option>
                         </select>
-                        <select name="categorie" id="">
+                        <select name="categorie" required id="">
                             <option value="">Catégorie</option>
-                            <option value="">Véhicules</option>
-                            <option value="">MAison et Jardin</option>
-                            <option value="">Emploi et Services</option>
-                            <option value="">Immobilier</option>
-                            <option value="">Habillement et Bien Etre</option>
-                            <option value="">Informatique et Multimédia</option>
-                            <option value="">Loisirs et Divertissement</option>
-                            <option value="">Autres</option>
+                            <option value="vehicules">Véhicules</option>
+                            <option value="maison ">MAison et Jardin</option>
+                            <option value="emploi">Emploi et Services</option>
+                            <option value="immobilier">Immobilier</option>
+                            <option value="habillement">Habillement et Bien Etre</option>
+                            <option value="informatique">Informatique et Multimédia</option>
+                            <option value="loisirs">Loisirs et Divertissement</option>
+                            <option value="autres">Autres</option>
                         </select>
-                        <select name="sous_categorie" id="">
-                            <option value="">Sous-catégorie</option>
-                            <option value="">Autres</option>
+                        <select name="sous_categorie" required id="">
+                            <option value="sous-catégorie">Sous-catégorie</option>
+                            <option value="autre">Autres</option>
                         </select>
                         <br>
                      
                         <hr class="hr-publish">
                         <div class="row">
-                            <span>Choisir Photo</span>
-                            <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
+                            <span>Choisir Photos</span>
+                            <input type="file" name="files[]" multiple accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
+                            
                         </div>
 					
                         <button type="submit" name="add_product" class="btn">Publier Annonce</button>
@@ -175,68 +253,16 @@ if(isset($_POST['add_product'])){
                 </div>
         </div>
         <br> <br>
-        <div class="total-price">
-
-            <table>
-                <tr>
-                    <td>Taille max</td>
-                    <td>5 Mo</td>
-
-                </tr>
-                <tr>
-                    <td>Nombre d'images max</td>
-                    <td>10</td>
-                    
-                </tr>
-
-            </table>
-        </div>
+        
 
     </div>
 
-    <div class="small-container cart-page admin-page">
-        <hr>
-        <h3>Résumé</h3>
-        <table>
-            <tr>
-                <th>Annonce</th>
-                <th>Prix</th>
-                <th>Ville</th>
-                <th>Catégorie</th>
-
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-1.jpg" alt="">
-                        <div>
-                            <p>Titre</p>
-                            <small>Regina Phalange</small>
-                            <br>
-                            
-                        </div>
-                    </div>
-                </td>
-                <td><p>$00.00</p></td>
-                <td><p>Ville</p></td>
-                <td><p>Catégorie</p></td>
-
-
-            </tr>
-            
-        </table>
-
-        <hr>
-        
-        
-        
-    </div>
 
 	<!--		footer		-->
-	<?php
-		require("./bases/footer.php")
-	?>
 
+	<?php
+        require("./bases/footer.php");
+    ?>
 
 
 </body>

@@ -6,6 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
 	<link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/cssMes.css">
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -13,16 +15,86 @@
 </head>
 <body>
 
-    <?php
-		require("./bases/navbar.php");
-		require("connect.php");
-		
-	?>
+
+<?php 
+	require("./bases/navbar.php");
 
 
-    <!--        Account Page        -->
+?>    
+<?php
+
+include 'connect.php';
+
+if(isset($_POST['submit'])){
+
+   $name = $_POST['name'];
+   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $nom = $_POST['nom'];
+   $nom = filter_var($nom, FILTER_SANITIZE_STRING);
+   $prenom = $_POST['prenom'];
+   $prenom = filter_var($prenom, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $pass = sha1($_POST['pass']);
+   $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+   $cpass = sha1($_POST['cpass']);
+   $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
+
+   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
+   $select_user->execute([$email,]);
+   $row = $select_user->fetch(PDO::FETCH_ASSOC);
+
+   if($select_user->rowCount() > 0){
+      $message[] = 'email already exists!';
+   }else{
+      if($pass != $cpass){
+         $message[] = 'confirm password not matched!';
+      }else{
+         $insert_user = $conn->prepare("INSERT INTO `users`(name,email, password,nom, prenom) VALUES(?,?,?,?,?)");
+         $insert_user->execute([$name, $email, $cpass,$nom , $prenom]);
+         $message[] = 'registered successfully, login now please!';
+         
+      }
+   }
+   
+   }
+
+ if(isset($_POST['submit1'])){
+
+    $email = $_POST['email'];
+    $email = filter_var($email, FILTER_SANITIZE_STRING);
+    $pass = sha1($_POST['pass']);
+    $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+ 
+    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ?");
+    $select_user->execute([$email, $pass]);
+    $row = $select_user->fetch(PDO::FETCH_ASSOC);
+ 
+    if($select_user->rowCount() > 0){
+       $_SESSION['user_id'] = $row['id'];
+       header('location:index.php');
+    }else{
+       $message[] = 'incorrect username or password!';      
+    }
+ 
+ }
+?> 
+
+<!--        Account Page        -->
     <div class="account-page">
         <div class="container">
+        <?php
+                        if(isset($message)){
+                            foreach($message as $message){
+                                echo '
+                                <div class="message">
+                                    <span>'.$message.'</span>
+                                    <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+                                </div>
+                                ';
+                            }
+                        }
+                        ?>
             <div class="row">
                 <div class="col-2">
                     <img src="images/image1.png" alt="" width="100%">
@@ -34,19 +106,24 @@
                             <span onclick="register()">Register</span>
                             <hr id="Indicator">
                         </div>
-                        <form id="LoginForm" action="login.php" method="post">
+                        <form id="LoginForm" action="" method="post">
                             <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
                             <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-                            <input type="submit" value="login now" class="btn" name="submit">
+                            <input type="submit" value="login now" class="btn" name="submit1">
                         </form>
-                        <form id="RegisterForm" action="register.php" method="post">
-                            <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box">
-                            <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-                            <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-                            <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                        <form id="RegisterForm" action="" method="post">
+                            <div class="row">
+                                <input type="text" name="name" required placeholder="username" maxlength="20"  class="box">
+                                <input type="text" name="nom" required placeholder="nom" maxlength="20"  class="box">
+                                <input type="text" name="prenom" required placeholder="prenom" maxlength="20"  class="box">
+                                <input type="email" name="email" required placeholder="E-mail" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                            </div>
+                           
+                                <input type="password" name="pass" required placeholder="Mot de passe" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                                <input type="password" name="cpass" required placeholder="confirm mot de passe" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+                           
                             <input type="submit" value="register now" class="btn" name="submit">
-                            
-                         </form>
+                            </form>
                       
                     </div>
                 </div>
@@ -56,10 +133,12 @@
 
 
 
+  
 	<!--		footer		-->
+
 	<?php
-		require("./bases/footer.php")
-	?>
+        require("./bases/footer.php");
+    ?>
 
 <!--        JS For Toggle From      -->
     <script>
