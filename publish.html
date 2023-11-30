@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<title>Top Annonces - Produits</title>
+</head>
+<body>
+		<div class="container">
+			<div class="navbar">
+				<div class="logo">
+					<a href="index.html"><img src="images/logo.png" width="125px" alt="logo"> </a>
+				</div>
+				<nav>
+					<ul>
+						<li><a href="index.html">Accueil</a></li>
+						<li><a href="products.html">Produits</a></li>
+						<li><a href="">Info</a></li>
+						<li><a href="">Contact</a></li>
+						<li><a href="account.html">Mon Compte</a></li>
+					</ul>
+				</nav>
+				<a href="myads.html"><img src="images/storefront.png" alt="" width="35px" height="35px"></a>
+			</div>
+
+		</div>
+
+
+    <!--        Annonces      -->
+    <div class="container publish-page">
+        <h2>Publiez Une Nouvelle Annonce</h2>
+        <hr>
+
+        <div class="row">
+           
+                <div class="form-container publish-container">
+                    <div class="form-btn">
+                        <span onclick="register()">Saisir les informations</span>
+                        <hr id="Indicator">
+                    </div>
+
+                    
+                    <form id="RegisterForm" action="">
+                        <div class="row">
+                                <input type="text" placeholder="Titre" >
+                            
+                        </div>
+                        <div class="row">
+                                <input type="number" placeholder="Prix">
+
+                                <input type="text" placeholder="Description">
+
+                        </div>
+
+                        <select name="" id="">
+                            <option value="">Ville</option>
+                            <option value="">Ariana</option>
+                            <option value="">Ben Arous</option>
+                            <option value="">Bizerte</option>
+                            <option value="">Béja</option>
+                            <option value="">Gabes</option>
+                            <option value="">Gafsa</option>
+                            <option value="">Jendouba</option>
+                            <option value="">Kairouan</option>
+                            <option value="">Kasserine</option>
+                            <option value="">Kébili</option>
+                            <option value="">La Manouba</option>
+                            <option value="">Le Kef</option>
+                            <option value="">Mahdia</option>
+                            <option value="">Monastir</option>
+                            <option value="">Médenine</option>
+                            <option value="">Nabeul</option>
+                            <option value="">Sfax</option>
+                            <option value="">Sidi Bou Zid</option>
+                            <option value="">Siliana</option>
+                            <option value="">Sousse</option>
+                            <option value="">Tataouine</option>
+                            <option value="">Tozeur</option>
+                            <option value="">Tunis</option>
+                            <option value="">Zaghouan</option>
+                        </select>
+                        <select name="" id="">
+                            <option value="">Délégation</option>
+                            <option value="">Autres Villes</option>
+                        </select>
+                        <select name="" id="">
+                            <option value="">Catégorie</option>
+                            <option value="">Véhicules</option>
+                            <option value="">MAison et Jardin</option>
+                            <option value="">Emploi et Services</option>
+                            <option value="">Immobilier</option>
+                            <option value="">Habillement et Bien Etre</option>
+                            <option value="">Informatique et Multimédia</option>
+                            <option value="">Loisirs et Divertissement</option>
+                            <option value="">Autres</option>
+                        </select>
+                        <select name="" id="">
+                            <option value="">Sous-catégorie</option>
+                            <option value="">Autres</option>
+                        </select>
+                        <br>
+                        <hr class="hr-publish">
+                        <div class="row">
+                            <small>Choisir les photos</small>
+							<input type="file" name="" id="">
+                        </div>
+							
+							
+                        <button type="submit" class="btn">Publier Annonce</button>
+                    </form>
+
+                </div>
+        </div>
+        <br> <br>
+        <div class="total-price">
+
+            <table>
+                <tr>
+                    <td>Taille max</td>
+                    <td>5 Mo</td>
+
+                </tr>
+                <tr>
+                    <td>Nombre d'images max</td>
+                    <td>10</td>
+                    
+                </tr>
+
+            </table>
+        </div>
+
+    </div>
+
+    <div class="small-container cart-page admin-page">
+        <hr>
+        <h3>Résumé</h3>
+        <table>
+            <tr>
+                <th>Annonce</th>
+                <th>Prix</th>
+                <th>Ville</th>
+                <th>Catégorie</th>
+
+            </tr>
+            <tr>
+                <td>
+                    <div class="cart-info">
+                        <img src="images/buy-1.jpg" alt="">
+                        <div>
+                            <p>Titre</p>
+                            <small>Regina Phalange</small>
+                            <br>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><p>$00.00</p></td>
+                <td><p>Ville</p></td>
+                <td><p>Catégorie</p></td>
+
+
+            </tr>
+            
+        </table>
+
+        <hr>
+        
+        
+        
+    </div>
+
+	<!--		footer		-->
+
+	<div class="footer">
+		<div class="container">
+			<div class="row">
+				<div class="footer-col-1">
+					<h3>Télécharger L'App</h3>
+					<p>Télécharger Notre Application pour Android et iOS.</p>
+					<div class="app-logo">
+						<img src="images/play-store.png" alt="">
+						<img src="images/app-store.png" alt="">
+					</div>
+				</div>
+				<div class="footer-col-2">
+					<img src="images/logo-white.png" alt="">
+					<p>Top Annonces a Pour But de Rendre les Petites Annonces Accessibles Pour Tous les Tunisien(ne)s.</p>
+				</div>
+				<div class="footer-col-3">
+					<h3>Liens Utiles</h3>
+					<ul>
+						<li>Coupons</li>
+						<li>Blog</li>
+						<li>S.A.V</li>
+						<li>Affiliale</li>
+					</ul>
+				</div>
+				<div class="footer-col-4">
+					<h3>Liens Utiles</h3>
+					<ul>
+						<li>Facebook</li>
+						<li>Twitter</li>
+						<li>Instagram</li>
+						<li>Youtube</li>
+					</ul>
+				</div>
+			</div>
+			<hr>
+			<p class="copyright">Copyright 2022 FBS & IB</p>
+
+		</div>
+	</div>
+
+
+
+</body>
+</html>
